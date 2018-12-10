@@ -2,10 +2,16 @@
 
 require 'rspec/core/rake_task'
 
-# Exlucde integration tests
+# Exclude integration tests
 RSpec::Core::RakeTask.new(:spec_unit) do |t, task_args|
   t.verbose = false
   t.exclude_pattern = 'spec/integration/*_spec.rb'
+end
+
+# Run all tests, with coverage report
+RSpec::Core::RakeTask.new(:coverage) do |t, task_args|
+  ENV['CODECOV'] = '1'
+  t.verbose = false
 end
 
 # Run all tests, include all
@@ -14,4 +20,4 @@ RSpec::Core::RakeTask.new(:spec) do |t, task_args|
 end
 
 # Run both by default
-task default: [:spec_unit, :spec]
+task default: [:spec_unit, :spec, :coverage]

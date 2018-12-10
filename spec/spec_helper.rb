@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
-require 'simplecov' if ENV['SIMPLECOV']
+require 'simplecov' if ENV['SIMPLECOV'] || ENV['CODECOV']
+if ENV['CODECOV']
+  require 'codecov'
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+end
+
 require 'ratonvirus'
 
 require_relative 'helpers'
