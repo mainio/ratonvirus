@@ -10,6 +10,9 @@
 # rspec failure tracking
 .rspec-failures
 
+# rbenv vars
+.rbenv-vars
+
 # Dummy app unnecessary folders
 /spec/rails_dummy_app/db/*.sqlite3
 /spec/rails_dummy_app/coverage
