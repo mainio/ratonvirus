@@ -1,0 +1,6 @@
+sv:
+  errors:
+    messages:
+      antivirus_virus_detected: 'innehåller ett virus'
+      antivirus_client_error: 'kunde inte behandlas för virusskanning'
+      antivirus_file_not_found: 'kunde inte hittas för virusskanning'

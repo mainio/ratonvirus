@@ -1,0 +1,6 @@
+fi:
+  errors:
+    messages:
+      antivirus_virus_detected: 'sisältää viruksen'
+      antivirus_client_error: 'ei voitu käsitellä virustarkistusta varten'
+      antivirus_file_not_found: 'ei ollut saatavilla virustarkistusta varten'

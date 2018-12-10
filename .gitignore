@@ -1,0 +1,17 @@
+/.bundle/
+/.yardoc
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
+
+# rspec failure tracking
+.rspec-failures
+
+# Dummy app unnecessary folders
+/spec/rails_dummy_app/db/*.sqlite3
+/spec/rails_dummy_app/coverage
+/spec/rails_dummy_app/log
+/spec/rails_dummy_app/tmp

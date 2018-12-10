@@ -1,0 +1,6 @@
+en:
+  errors:
+    messages:
+      antivirus_virus_detected: 'contains a virus'
+      antivirus_client_error: 'could not be processed for virus scan'
+      antivirus_file_not_found: 'could not be found for virus scan'
