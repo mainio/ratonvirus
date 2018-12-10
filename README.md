@@ -31,8 +31,8 @@ puts "File contains a virus" if Ratonvirus.scanner.virus?('/path/to/file.pdf')
 
 Manual scanning works e.g. for file uploads, file object and file paths.
 
-Ratonvirus works well with Active Storage out of the box. Support for
-CarrierWave is provided through an additional gem (see details well).
+Ratonvirus works with Active Storage out of the box. Support for CarrierWave is
+also built in, assuming you already have CarrierWave as a dependency.
 
 ## When to use this?
 
@@ -102,7 +102,7 @@ Ratonvirus correctly configured.
 
 By default Ratonvirus is set to remove all infected files that it detects after
 scanning them. If you want to remove this functionality, please refer to the
-[Scanner addons](doc/index.md#scanner-addons) section of the developer
+[Scanner addons](docs/index.md#scanner-addons) section of the developer
 documentation.
 
 ## Usage
@@ -240,7 +240,7 @@ end
 ## Further configuration and development
 
 For further information about the configurations and how to create custom
-scanners, please refer to the [documentation](doc/index.md).
+scanners, please refer to the [documentation](docs/index.md).
 
 ## License
 
