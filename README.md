@@ -1,4 +1,4 @@
-# ![Ratonvirus](ratonvirus.png?raw=true "Ratonvirus" | width=400)
+# <img alt="Ratonvirus" src="https://raw.githubusercontent.com/mainio/ratonvirus/master/ratonvirus.png" width="600">
 
 Rails antivirus made easy.
 Developed by [Mainio Tech](https://www.mainiotech.fi/).
