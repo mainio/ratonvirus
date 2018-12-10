@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     ratonvirus (0.1.0)
-      activesupport
+      activesupport (~> 5.0)
 
 GEM
   remote: https://rubygems.org/
@@ -119,15 +119,15 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activemodel
-  activestorage
-  carrierwave
+  activemodel (~> 5.0)
+  activestorage (~> 5.0)
+  carrierwave (~> 1.2)
   codecov
-  rake
+  rake (~> 12.3)
   ratonvirus!
-  rspec
-  rspec-rails
-  simplecov
+  rspec (~> 3.0)
+  rspec-rails (~> 3.0)
+  simplecov (~> 0.16.0)
   sqlite3
 
 BUNDLED WITH
