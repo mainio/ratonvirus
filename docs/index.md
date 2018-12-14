@@ -58,7 +58,8 @@ Clamby provides an integration library for the ClamAV virus scanner. Using this
 scanner type requires you to have the ClamAV virus scanner executables installed
 on your machine.
 
-For further installation instructions, please refer to `ratonvirus-clamby`
+For further installation instructions, please refer to
+[`ratonvirus-clamby`](https://github.com/mainio/ratonvirus-clamby)
 documentation.
 
 ### Implement your own scanner
@@ -126,7 +127,7 @@ To configure this storage, use the following code in the Ratonvirus initializer:
 ```ruby
 # config/initializers/ratonvirus.rb
 Ratonvirus.configure do |config|
-  config.storage = :multi, {storages: :filepath, :active_storage}
+  config.storage = :multi, {storages: [:filepath, :active_storage]}
 end
 ```
 
@@ -152,7 +153,7 @@ Take a look at [Implementing custom storages](#implementing-custom-storages).
 
 ### Scanner addon: remove_infected
 
-**APPLIED BY DEFAULT**
+**default**
 
 This addon removes the scanned files from the file system in case they were
 detected to contain a virus.
@@ -171,13 +172,24 @@ end
 ```
 
 You can also remove any existing addons from being added to any new scanner
-instances with  the following configuration:
+instances with the following configuration:
 
 ```ruby
 Ratonvirus.configure do |config|
   # This would remove the `Ratonvirus::Scanner::Addon::CustomAddon` from being
   # applied to any new scanner instances. Existing instances are not affected.
   config.remove_addon :custom_addon
+end
+```
+
+If you want to configure all addons at once, you can do that with the following
+configuration:
+
+```ruby
+Ratonvirus.configure do |config|
+  # This would define only the `Ratonvirus::Scanner::Addon::CustomAddon` to be
+  # applied to any new scanner instances. Existing instances are not affected.
+  config.addons = [:custom_addon]
 end
 ```
 

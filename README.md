@@ -53,7 +53,9 @@ as you are used to with many other gems.
 
 You will need to setup a virus scanner on your machine. If you have done that
 before, configuration should be rather simple. Instructions are provided for
-the open source ClamAV scanner.
+the open source ClamAV scanner in the
+[`ratonvirus-clamby`](https://github.com/mainio/ratonvirus-clamby)
+documentation.
 
 This gem ships with an example
 [EICAR file](https://en.wikipedia.org/wiki/EICAR_test_file) scanner to test out
@@ -153,7 +155,7 @@ end
 
 # When scanning files, file paths or active storage resources
 Ratonvirus.configure do |config|
-  config.storage = :multi, [:filepath, :active_storage]
+  config.storage = :multi, {storages: [:filepath, :active_storage]}
 end
 ```
 
@@ -209,6 +211,9 @@ class YourModel < ApplicationRecord
 end
 ```
 
+For installing ClamAV, refer to
+[`ratonvirus-clamby`](https://github.com/mainio/ratonvirus-clamby)
+
 #### CarrierWave and ClamAV
 
 Gemfile:
@@ -236,6 +241,9 @@ class YourModel < ApplicationRecord
   validates :file, antivirus: true
 end
 ```
+
+For installing ClamAV, refer to
+[`ratonvirus-clamby`](https://github.com/mainio/ratonvirus-clamby)
 
 ## Further configuration and development
 
