@@ -3,8 +3,6 @@ PATH
   specs:
     ratonvirus (0.1.0)
       activesupport (~> 5.0)
-      rubocop (~> 0.64.0)
-      rubocop-rspec (~> 1.32)
 
 GEM
   remote: https://rubygems.org/
@@ -148,6 +146,8 @@ DEPENDENCIES
   ratonvirus!
   rspec (~> 3.0)
   rspec-rails (~> 3.0)
+  rubocop (~> 0.64.0)
+  rubocop-rspec (~> 1.32)
   simplecov (~> 0.16.0)
   sqlite3
 
