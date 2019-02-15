@@ -50,6 +50,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "carrierwave", "~> 1.2"
 
   # Rubocop linter
-  spec.add_dependency "rubocop", "~> 0.64.0"
-  spec.add_dependency "rubocop-rspec", "~> 1.32"
+  spec.add_development_dependency "rubocop", "~> 0.64.0"
+  spec.add_development_dependency "rubocop-rspec", "~> 1.32"
 end
