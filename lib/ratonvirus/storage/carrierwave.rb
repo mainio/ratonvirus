@@ -25,7 +25,7 @@ module Ratonvirus
 
       def asset_remove(asset)
         path = asset.file.path
-        result = asset.remove!
+        asset.remove!
 
         # Remove the temp cache dir if it exists
         dir = File.dirname(path)

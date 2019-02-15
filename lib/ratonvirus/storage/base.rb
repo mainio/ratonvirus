@@ -1,14 +1,14 @@
+# frozen_string_literal: true
+
 module Ratonvirus
   module Storage
     class Base
       attr_reader :config
 
-      def initialize(configuration={})
+      def initialize(configuration = {})
         @config = configuration.dup
 
-        if respond_to?(:setup)
-          setup
-        end
+        setup if respond_to?(:setup)
       end
 
       # Default process implementation.
@@ -23,34 +23,27 @@ module Ratonvirus
         end
       end
 
-      def changed?(record, attribute)
-        raise NotImplementedError.new(
-          "Implement changed? on #{self.class.name}"
-        )
+      def changed?(_record, _attribute)
+        raise NotImplementedError, "Implement changed? on #{self.class.name}"
       end
 
-      def accept?(resource)
-        raise NotImplementedError.new(
-          "Implement accept? on #{self.class.name}"
-        )
+      def accept?(_resource)
+        raise NotImplementedError, "Implement accept? on #{self.class.name}"
       end
 
-      def asset_path(asset)
-        raise NotImplementedError.new(
-          "Implement path on #{self.class.name}"
-        )
+      def asset_path(_asset)
+        raise NotImplementedError, "Implement path on #{self.class.name}"
       end
 
-      def asset_remove(asset)
-        raise NotImplementedError.new(
-          "Implement remove on #{self.class.name}"
-        )
+      def asset_remove(_asset)
+        raise NotImplementedError, "Implement remove on #{self.class.name}"
       end
 
       protected
-        def processable(asset)
-          Processable.new(self, asset)
-        end
+
+      def processable(asset)
+        Processable.new(self, asset)
+      end
     end
   end
 end

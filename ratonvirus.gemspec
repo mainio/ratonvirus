@@ -1,18 +1,19 @@
+# frozen_string_literal: true
 
-lib = File.expand_path("../lib", __FILE__)
+lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "ratonvirus/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "ratonvirus"
-  spec.version       = Ratonvirus::VERSION
-  spec.authors       = ["Antti Hukkanen"]
-  spec.email         = ["antti.hukkanen@mainiotech.fi"]
+  spec.name = "ratonvirus"
+  spec.version = Ratonvirus::VERSION
+  spec.authors = ["Antti Hukkanen"]
+  spec.email = ["antti.hukkanen@mainiotech.fi"]
 
-  spec.summary       = "Provides antivirus checks for Rails."
-  spec.description   = "Adds antivirus check capability for Rails applications."
-  spec.homepage      = "https://github.com/mainio/ratonvirus"
-  spec.license       = "MIT"
+  spec.summary = "Provides antivirus checks for Rails."
+  spec.description = "Adds antivirus check capability for Rails applications."
+  spec.homepage = "https://github.com/mainio/ratonvirus"
+  spec.license = "MIT"
 
   spec.files = Dir[
     "{app,config,lib}/**/*",
@@ -47,4 +48,8 @@ Gem::Specification.new do |spec|
   # The following dependency is needed to test the CarrierWave storage. This is
   # not required for running this gem without CarrierWave.
   spec.add_development_dependency "carrierwave", "~> 1.2"
+
+  # Rubocop linter
+  spec.add_dependency "rubocop", "~> 0.64.0"
+  spec.add_dependency "rubocop-rspec", "~> 1.32"
 end

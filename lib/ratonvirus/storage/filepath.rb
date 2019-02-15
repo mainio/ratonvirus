@@ -1,10 +1,10 @@
+# frozen_string_literal: true
+
 module Ratonvirus
   module Storage
     class Filepath < Base
       def changed?(record, attribute)
-        if record.respond_to? :"#{attribute}_changed?"
-          return record.public_send :"#{attribute}_changed?"
-        end
+        return record.public_send :"#{attribute}_changed?" if record.respond_to? :"#{attribute}_changed?"
 
         # Some backends do not implement the `attribute_changed?` methods for
         # the file resources. In that case our best guess is to check whether

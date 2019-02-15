@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Ratonvirus
   module Scanner
     class Base
@@ -12,7 +14,7 @@ module Ratonvirus
       attr_reader :config
       attr_reader :errors # Only available after `virus?` has been called.
 
-      def initialize(configuration={})
+      def initialize(configuration = {})
         @config = default_config.merge!(configuration)
 
         # Make the following callbacks available:
@@ -113,42 +115,40 @@ module Ratonvirus
       end
 
       protected
-        def default_config
-          {
-            force_availability: false,
-          }
-        end
 
-        def storage
-          Ratonvirus.storage
-        end
+      def default_config
+        { force_availability: false }
+      end
 
-        def scan(processable)
-          processable.path do |path|
-            run_callbacks :scan, processable do
-              run_scan(path)
-            end
+      def storage
+        Ratonvirus.storage
+      end
+
+      def scan(processable)
+        processable.path do |path|
+          run_callbacks :scan, processable do
+            run_scan(path)
           end
         end
+      end
 
-        def run_scan(path)
-          raise NotImplementedError.new(
-            "Implement run_scan on #{self.class.name}"
-          )
-        end
+      def run_scan(_path)
+        raise NotImplementedError, "Implement run_scan on #{self.class.name}"
+      end
 
       private
-        # Prepare is called each time before scanning is run. During the first
-        # call to this method, the addons are applied to the scanner instance.
-        def prepare
-          return if @ready
 
-          Ratonvirus.addons.each do |addon_cls|
-            extend addon_cls
-          end
+      # Prepare is called each time before scanning is run. During the first
+      # call to this method, the addons are applied to the scanner instance.
+      def prepare
+        return if @ready
 
-          @ready = true
+        Ratonvirus.addons.each do |addon_cls|
+          extend addon_cls
         end
+
+        @ready = true
+      end
     end
   end
 end

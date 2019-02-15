@@ -13,14 +13,14 @@ class AntivirusValidator < ActiveModel::EachValidator
     scanner = Ratonvirus.scanner
     return unless scanner.available?
 
-    if scanner.virus?(value)
-      if scanner.errors.any?
-        scanner.errors.each do |err|
-          record.errors.add attribute, err
-        end
-      else
-        record.errors.add attribute, :antivirus_virus_detected
+    return unless scanner.virus?(value)
+
+    if scanner.errors.any?
+      scanner.errors.each do |err|
+        record.errors.add attribute, err
       end
+    else
+      record.errors.add attribute, :antivirus_virus_detected
     end
   end
 end

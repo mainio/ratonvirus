@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :ratonvirus do
   desc "Tests if the antivirus scanner is available and properly configured"
   task test: :environment do
@@ -9,7 +11,7 @@ namespace :ratonvirus do
         puts ""
         puts "Please refer to Ratonvirus documentation for proper configuration."
       end
-    rescue
+    rescue StandardError
       puts "Ratonvirus scanner is not configured."
       puts ""
       puts "Please refer to Ratonvirus documentation for proper configuration."
@@ -18,7 +20,7 @@ namespace :ratonvirus do
 
   desc "Scans the given file through the antivirus scanner"
   task scan: :environment do |t, args|
-    if args.extras.length < 1
+    if args.extras.empty?
       puts "No files given."
       puts "Usage:"
       puts "  #{t.name}[/path/to/first/file.pdf,/path/to/second/file.pdf]"

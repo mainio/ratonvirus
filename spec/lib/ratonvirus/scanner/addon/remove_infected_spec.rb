@@ -5,46 +5,46 @@ require "spec_helper"
 describe Ratonvirus::Scanner::Addon::RemoveInfected do
   let(:subject) { double }
 
-  describe '.extended' do
-    it 'is called when addon is applied' do
+  describe ".extended" do
+    it "is called when addon is applied" do
       expect(described_class).to receive(:extended).with(subject)
       subject.extend described_class
     end
 
-    it 'calls .after_scan on the extended object with correct arguments' do
+    it "calls .after_scan on the extended object with correct arguments" do
       expect(subject).to receive(:after_scan).with(:remove_infected_file)
       subject.extend described_class
     end
   end
 
-  describe '#remove_infected_file' do
+  describe "#remove_infected_file" do
     let(:method) { subject.method(:remove_infected_file) }
     let(:processable) { double }
 
-    before(:each) do
+    before do
       expect(subject).to receive(:after_scan)
       subject.extend described_class
     end
 
-    describe 'when virus is not detected' do
-      before(:each) do
+    describe "when virus is not detected" do
+      before do
         expect(subject).to receive(:errors).and_return([])
       end
 
-      it 'does not call storage' do
+      it "does not call storage" do
         expect(processable).not_to receive(:remove)
-        method.call('test')
+        method.call("test")
       end
     end
 
-    context 'when virus is detected' do
-      before(:each) do
+    context "when virus is detected" do
+      before do
         expect(subject).to receive(:errors).and_return(
           [:antivirus_virus_detected]
         )
       end
 
-      it 'calls storage.remove with the given resource' do
+      it "calls storage.remove with the given resource" do
         expect(processable).to receive(:remove)
         method.call(processable)
       end

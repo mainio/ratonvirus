@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
-require 'simplecov' if ENV['SIMPLECOV'] || ENV['CODECOV']
-if ENV['CODECOV']
-  require 'codecov'
+require "simplecov" if ENV["SIMPLECOV"] || ENV["CODECOV"]
+if ENV["CODECOV"]
+  require "codecov"
   SimpleCov.formatter = SimpleCov::Formatter::Codecov
 end
 
-require 'ratonvirus'
+require "ratonvirus"
 
-require_relative 'helpers'
+require_relative "helpers"
 
 RSpec.configure do |config|
   config.include Ratonvirus::Test::Helpers
 
-  config.before(:each) do
+  config.before do
     # Reset the config before each test
     Ratonvirus.reset
 
@@ -24,9 +24,9 @@ RSpec.configure do |config|
     # the default tests. For example, testing the Eicar scanner would cause the
     # infected test file to be removed when detected with the default
     # configuration.
-    Ratonvirus.configure do |config|
-      config.storage = :filepath
-      config.addons = []
+    Ratonvirus.configure do |rv_config|
+      rv_config.storage = :filepath
+      rv_config.addons = []
     end
   end
 end

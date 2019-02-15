@@ -3,18 +3,18 @@
 require "rails_helper"
 
 describe AntivirusValidator do
-  let(:clean_file) { fixture_file_upload('files/clean_file.pdf') }
-  let(:infected_file) { fixture_file_upload('files/infected_file.pdf') }
+  let(:clean_file) { fixture_file_upload("files/clean_file.pdf") }
+  let(:infected_file) { fixture_file_upload("files/infected_file.pdf") }
 
-  before(:each) do
+  before do
     Ratonvirus.configure do |config|
       config.scanner = :eicar
       config.storage = :carrierwave
     end
   end
 
-  context 'with single clean file' do
-    it 'should be valid' do
+  context "with single clean file" do
+    it "is valid" do
       a = Article.new
       a.carrierwave_file = clean_file
 
@@ -22,8 +22,8 @@ describe AntivirusValidator do
     end
   end
 
-  context 'with single infected file' do
-    it 'should be not valid' do
+  context "with single infected file" do
+    it "is not valid" do
       a = Article.new
       a.carrierwave_file = infected_file
 
@@ -31,8 +31,8 @@ describe AntivirusValidator do
     end
   end
 
-  context 'with multiple clean files' do
-    it 'should be valid' do
+  context "with multiple clean files" do
+    it "is valid" do
       a = Article.new
 
       files = []
@@ -45,8 +45,8 @@ describe AntivirusValidator do
     end
   end
 
-  context 'with multiple infected files' do
-    it 'should be not valid' do
+  context "with multiple infected files" do
+    it "is not valid" do
       a = Article.new
 
       files = []
@@ -59,8 +59,8 @@ describe AntivirusValidator do
     end
   end
 
-  context 'with multiple files containing single infected file' do
-    it 'should be not valid' do
+  context "with multiple files containing single infected file" do
+    it "is not valid" do
       a = Article.new
 
       files = []
@@ -74,8 +74,8 @@ describe AntivirusValidator do
     end
   end
 
-  context 'with multiple files containing multiple infected files' do
-    it 'should be not valid' do
+  context "with multiple files containing multiple infected files" do
+    it "is not valid" do
       a = Article.new
 
       files = []

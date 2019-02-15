@@ -4,48 +4,48 @@ require "spec_helper"
 
 describe Ratonvirus::Storage::Multi do
   describe "#setup" do
-    before(:each) do
+    before do
       subject.instance_variable_set(:@config, config)
     end
 
-    context 'with no config provided' do
+    context "with no config provided" do
       let(:config) { {} }
 
-      it 'calls for the config array once' do
+      it "calls for the config array once" do
         expect(subject).to receive(:config).and_call_original
         subject.setup
       end
     end
 
-    context 'with invalid config provided' do
-      let(:config) { {storages: :active_storage} }
+    context "with invalid config provided" do
+      let(:config) { { storages: :active_storage } }
 
-      it 'calls for the config array once' do
+      it "calls for the config array once" do
         expect(subject).to receive(:config).and_call_original
         subject.setup
       end
     end
 
-    context 'with no keys provided' do
-      let(:config) { {storages: []} }
+    context "with no keys provided" do
+      let(:config) { { storages: [] } }
 
-      it 'calls for the config array twice' do
+      it "calls for the config array twice" do
         expect(subject).to receive(:config).twice.and_call_original
         subject.setup
       end
     end
 
-    context 'with only storage keys provided' do
-      let(:config) { {storages: [:active_storage, :filepath]} }
+    context "with only storage keys provided" do
+      let(:config) { { storages: [:active_storage, :filepath] } }
 
-      it 'calls for the config array twice and ' do
+      it "calls for the config array twice and" do
         expect(subject).to receive(:config).twice.ordered.and_call_original
         expect(Ratonvirus).to receive(:backend_class)
-          .with('Storage', :active_storage).ordered.and_call_original
-        expect(Ratonvirus::Storage::ActiveStorage).to receive(:new).with({})
-          .ordered
-        expect(Ratonvirus).to receive(:backend_class).ordered
-          .with('Storage', :filepath).and_call_original
+          .with("Storage", :active_storage).ordered.and_call_original
+        expect(Ratonvirus::Storage::ActiveStorage).to receive(:new)
+          .with({}).ordered
+        expect(Ratonvirus).to receive(:backend_class)
+          .ordered.with("Storage", :filepath).and_call_original
         expect(Ratonvirus::Storage::Filepath).to receive(:new).with({}).ordered
 
         subject.setup
@@ -54,22 +54,26 @@ describe Ratonvirus::Storage::Multi do
       end
     end
 
-    context 'with storage keys and config provided' do
-      let(:config) { {storages: [
-        [:active_storage, {conf: 'option'}],
-        [:filepath, {conf2: 'option2'}]
-      ]} }
+    context "with storage keys and config provided" do
+      let(:config) do
+        {
+          storages: [
+            [:active_storage, { conf: "option" }],
+            [:filepath, { conf2: "option2" }]
+          ]
+        }
+      end
 
-      it 'calls for the config array twice and ' do
+      it "calls for the config array twice and sets up the correct storages" do
         expect(subject).to receive(:config).twice.ordered.and_call_original
         expect(Ratonvirus).to receive(:backend_class)
-          .with('Storage', :active_storage).ordered.and_call_original
+          .with("Storage", :active_storage).ordered.and_call_original
         expect(Ratonvirus::Storage::ActiveStorage).to receive(:new)
-          .with({conf: 'option'}).ordered
-        expect(Ratonvirus).to receive(:backend_class).ordered
-          .with('Storage', :filepath).and_call_original
+          .with(conf: "option").ordered
+        expect(Ratonvirus).to receive(:backend_class)
+          .with("Storage", :filepath).ordered.and_call_original
         expect(Ratonvirus::Storage::Filepath).to receive(:new)
-          .with({conf2: 'option2'}).ordered
+          .with(conf2: "option2").ordered
 
         subject.setup
 
@@ -78,145 +82,145 @@ describe Ratonvirus::Storage::Multi do
     end
   end
 
-  context '#process' do
+  describe "#process" do
     let(:resource) { subject }
 
-    context 'when block is not given' do
-      it 'should not call storage_for' do
+    context "when block is not given" do
+      it "does not call storage_for" do
         expect(subject).not_to receive(:storage_for)
         subject.process(resource)
       end
     end
 
-    context 'when block is given' do
+    context "when block is given" do
       let(:storage) { double }
-      let(:block) { Proc.new {} }
+      let(:block) { proc {} }
 
-      before(:each) do
-        expect(subject).to receive(:storage_for).with(resource)
-          .and_yield(storage)
+      before do
+        expect(subject).to receive(:storage_for)
+          .with(resource).and_yield(storage)
       end
 
-      it 'should call process on the underlying storage' do
+      it "calls process on the underlying storage" do
         expect(storage).to receive(:process).with(resource, &block)
         subject.process(resource, &block)
       end
     end
   end
 
-  context '#changed?' do
+  describe "#changed?" do
     let(:record) { double }
     let(:attribute) { :test }
     let(:resource) { double }
 
-    before(:each) do
-      expect(record).to receive(:public_send).with(attribute)
-        .and_return(resource)
+    before do
+      expect(record).to receive(:public_send)
+        .with(attribute).and_return(resource)
     end
 
-    context 'when storage_for does not yield' do
-      it 'should return false' do
+    context "when storage_for does not yield" do
+      it "returns false" do
         expect(subject).to receive(:storage_for).with(resource)
         expect(subject.changed?(record, attribute)).to be(false)
       end
     end
 
-    context 'when storage_for yields' do
+    context "when storage_for yields" do
       let(:storage) { double }
 
-      before(:each) do
-        expect(subject).to receive(:storage_for).with(resource)
-          .and_yield(storage)
+      before do
+        expect(subject).to receive(:storage_for)
+          .with(resource).and_yield(storage)
       end
 
-      it 'should call changed? on the underlying storage' do
+      it "calls changed? on the underlying storage" do
         changed = double
-        expect(storage).to receive(:changed?).with(record, attribute)
-          .and_return(changed)
+        expect(storage).to receive(:changed?)
+          .with(record, attribute).and_return(changed)
 
         expect(subject.changed?(record, attribute)).to be(changed)
       end
     end
   end
 
-  context '#accept?' do
+  describe "#accept?" do
     let(:resource) { double }
 
-    context 'when storage_for does not yield' do
-      it 'should return false' do
+    context "when storage_for does not yield" do
+      it "returns false" do
         expect(subject).to receive(:storage_for).with(resource)
         expect(subject.accept?(resource)).to be(false)
       end
     end
 
-    context 'when storage_for yields' do
+    context "when storage_for yields" do
       let(:storage) { double }
 
-      it 'should return false' do
-        expect(subject).to receive(:storage_for).with(resource)
-          .and_yield(storage)
+      it "returns true" do
+        expect(subject).to receive(:storage_for)
+          .with(resource).and_yield(storage)
         expect(subject.accept?(resource)).to be(true)
       end
     end
   end
 
-  context '#storage_for' do
+  describe "#storage_for" do
     let(:method) { subject.method(:storage_for) }
     let(:resource) { double }
 
-    context 'when storages has' do
+    context "when storages has" do
       let(:storage) { double }
 
-      before(:each) do
+      before do
         subject.instance_variable_set(:@storages, storages)
       end
 
-      context 'single item' do
+      context "with single item" do
         let(:storage) { double }
         let(:storages) { [storage] }
 
-        it 'should not yield if storage.accept? returns false' do
+        it "does not yield if storage.accept? returns false" do
           expect(storage).to receive(:accept?).with(resource).and_return(false)
-          expect{ |b| method.call(resource, &b) }.not_to yield_control
+          expect { |b| method.call(resource, &b) }.not_to yield_control
         end
       end
 
-      context 'multiple items' do
+      context "with multiple items" do
         let(:storage1) { double }
         let(:storage2) { double }
         let(:storage3) { double }
         let(:storages) { [storage1, storage2, storage3] }
 
-        it 'should yield only on the first storage if it accepts the resource' do
+        it "yields only on the first storage if it accepts the resource" do
           expect(storage1).to receive(:accept?).with(resource).and_return(true)
           expect(storage2).not_to receive(:accept?)
           expect(storage3).not_to receive(:accept?)
 
-          expect{ |b| method.call(resource, &b) }.to yield_with_args(storage1)
+          expect { |b| method.call(resource, &b) }.to yield_with_args(storage1)
         end
 
-        it 'should yield on the first and second storage if second one accepts the resource' do
+        it "yields on the first and second storage if second one accepts the resource" do
           expect(storage1).to receive(:accept?).with(resource).and_return(false)
           expect(storage2).to receive(:accept?).with(resource).and_return(true)
           expect(storage3).not_to receive(:accept?)
 
-          expect{ |b| method.call(resource, &b) }.to yield_with_args(storage2)
+          expect { |b| method.call(resource, &b) }.to yield_with_args(storage2)
         end
 
-        it 'should yield on all the storages if the last one accepts the resource' do
+        it "yields on all the storages if the last one accepts the resource" do
           expect(storage1).to receive(:accept?).with(resource).and_return(false)
           expect(storage2).to receive(:accept?).with(resource).and_return(false)
           expect(storage3).to receive(:accept?).with(resource).and_return(true)
 
-          expect{ |b| method.call(resource, &b) }.to yield_with_args(storage3)
+          expect { |b| method.call(resource, &b) }.to yield_with_args(storage3)
         end
 
-        it 'should not yield if all the storages reject the resource' do
+        it "does not yield if all the storages reject the resource" do
           expect(storage1).to receive(:accept?).with(resource).and_return(false)
           expect(storage2).to receive(:accept?).with(resource).and_return(false)
           expect(storage3).to receive(:accept?).with(resource).and_return(false)
 
-          expect{ |b| method.call(resource, &b) }.not_to yield_control
+          expect { |b| method.call(resource, &b) }.not_to yield_control
         end
       end
     end

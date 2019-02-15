@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Ratonvirus
   class Processable
     def initialize(storage, asset)
@@ -7,6 +9,7 @@ module Ratonvirus
 
     def path(&block)
       return unless block_given?
+
       @storage.asset_path(@asset, &block)
     end
 

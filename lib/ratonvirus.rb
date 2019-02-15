@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "fileutils"
 require "active_support"
 require "digest"
@@ -42,7 +44,7 @@ module Ratonvirus
   #
   # Usage (destroy):
   #   Ratonvirus.destroy_scanner
-  define_backend :scanner, 'Scanner'
+  define_backend :scanner, "Scanner"
 
   # Usage (set):
   #   Ratonvirus.storage = :active_storage
@@ -55,19 +57,19 @@ module Ratonvirus
   #
   # Usage (destroy):
   #   Ratonvirus.destroy_storage
-  define_backend :storage, 'Storage'
+  define_backend :storage, "Storage"
 
   # Resets Ratonvirus to its initial state and configuration
   def self.reset
     # Default addons
     @addons = [
       ActiveSupport::Inflector.constantize(
-        "#{self.name}::Scanner::Addon::RemoveInfected"
-      ),
+        "#{name}::Scanner::Addon::RemoveInfected"
+      )
     ]
 
-    self.destroy_scanner
-    self.destroy_storage
+    destroy_scanner
+    destroy_storage
   end
 
   def self.addons
@@ -77,15 +79,13 @@ module Ratonvirus
   def self.addons=(addons)
     @addons = []
     addons.each do |addon|
-      self.add_addon addon
+      add_addon addon
     end
   end
 
   def self.add_addon(addon)
     addon_cls = addon_class(addon)
-    unless @addons.include?(addon_cls)
-      @addons << addon_cls
-    end
+    @addons << addon_cls unless @addons.include?(addon_cls)
   end
 
   def self.remove_addon(addon)
@@ -99,7 +99,7 @@ module Ratonvirus
 
     subclass = ActiveSupport::Inflector.camelize(type.to_s)
     ActiveSupport::Inflector.constantize(
-      "#{self.name}::Scanner::Addon::#{subclass}"
+      "#{name}::Scanner::Addon::#{subclass}"
     )
   end
   private_class_method :addon_class

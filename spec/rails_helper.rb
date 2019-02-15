@@ -1,15 +1,16 @@
+# frozen_string_literal: true
+
 # Requirements for the Rails app
-require 'carrierwave'
+require "carrierwave"
 
 # Helper for running rails integration tests
-ENV['RAILS_ENV'] ||= 'test'
+ENV["RAILS_ENV"] ||= "test"
 require File.expand_path(
-  'rails_dummy_app/config/environment',
+  "rails_dummy_app/config/environment",
   File.dirname(__FILE__)
 )
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
-
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -40,13 +41,13 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 
 # Add additional requires below this line. Rails is not loaded until this point!
-require 'carrierwave/orm/activerecord'
-require 'spec_helper'
-require 'rspec/rails'
+require "carrierwave/orm/activerecord"
+require "spec_helper"
+require "rspec/rails"
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = File.expand_path('fixtures', File.dirname(__FILE__))
+  config.fixture_path = File.expand_path("fixtures", File.dirname(__FILE__))
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -72,7 +73,6 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
-
 
   config.after(:all) do
     # Clean up Active Storage folder after tests

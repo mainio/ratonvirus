@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Ratonvirus
   module Scanner
     module Support
@@ -44,40 +46,37 @@ module Ratonvirus
       #   end
       module Callbacks
         private
-          def run_callbacks(type, *args, &block)
-            if @_callbacks.nil?
-              raise NotDefinedError.new("No callbacks defined")
-            end
-            if @_callbacks[type].nil?
-              raise NotDefinedError.new("Callbacks for #{type} not defined")
-            end
 
-            run_callback_callables @_callbacks[type][:before], *args
-            result = yield *args
-            run_callback_callables @_callbacks[type][:after], *args
+        def run_callbacks(type, *args, &_block)
+          raise NotDefinedError, "No callbacks defined" if @_callbacks.nil?
+          raise NotDefinedError, "Callbacks for #{type} not defined" if @_callbacks[type].nil?
 
-            result
+          run_callback_callables @_callbacks[type][:before], *args
+          result = yield(*args)
+          run_callback_callables @_callbacks[type][:after], *args
+
+          result
+        end
+
+        def run_callback_callables(callables, *args)
+          callables.each do |callable|
+            send(callable, *args)
           end
+        end
 
-          def run_callback_callables(callables, *args)
-            callables.each do |callable|
-              send(callable, *args)
-            end
+        def define_callbacks(type)
+          @_callbacks ||= {}
+          @_callbacks[type] ||= {}
+          @_callbacks[type][:before] = []
+          @_callbacks[type][:after] = []
+
+          define_singleton_method "before_#{type}" do |callable|
+            @_callbacks[type][:before] << callable
           end
-
-          def define_callbacks(type)
-            @_callbacks ||= {}
-            @_callbacks[type] ||= {}
-            @_callbacks[type][:before] = []
-            @_callbacks[type][:after] = []
-
-            define_singleton_method "before_#{type}" do |callable|
-              @_callbacks[type][:before] << callable
-            end
-            define_singleton_method "after_#{type}" do |callable|
-              @_callbacks[type][:after] << callable
-            end
+          define_singleton_method "after_#{type}" do |callable|
+            @_callbacks[type][:after] << callable
           end
+        end
       end
     end
   end

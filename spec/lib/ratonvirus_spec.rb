@@ -3,6 +3,7 @@
 require "spec_helper"
 
 describe Ratonvirus do
+  # rubocop:disable RSpec/BeforeAfterAll
   before(:all) do
     # Define test addon
     test_addon = Module.new
@@ -19,27 +20,28 @@ describe Ratonvirus do
     # Make the scanner available as `Ratonvirus::Storage::Test`
     described_class::Storage.const_set(:Test, test_storage)
   end
+  # rubocop:enable RSpec/BeforeAfterAll
 
-  before(:each) do
+  before do
     # Make sure the default configs are applied to all tests in this spec since
     # the default configuration is modified for the other tests.
     described_class.reset
   end
 
-  it 'should have default addons' do
+  it "has default addons" do
     expect(described_class.addons).to contain_exactly(
       described_class::Scanner::Addon::RemoveInfected
     )
   end
 
-  it 'should be configurable' do
+  it "is configurable" do
     expect { |b| described_class.configure(&b) }.to yield_with_args(
       described_class
     )
   end
 
-  context 'with addons' do
-    it 'should accept new addons to be configured' do
+  context "with addons" do
+    it "accepts new addons to be configured" do
       described_class.configure do |config|
         config.add_addon :test
       end
@@ -49,7 +51,7 @@ describe Ratonvirus do
       )
     end
 
-    it 'should accept removing addons through configuration' do
+    it "accepts removing addons through configuration" do
       described_class.configure do |config|
         config.remove_addon :remove_infected
       end
@@ -57,7 +59,7 @@ describe Ratonvirus do
       expect(described_class.addons).to be_empty
     end
 
-    it 'should accept all addons to be configured' do
+    it "accepts all addons to be configured" do
       described_class.configure do |config|
         config.addons = [:remove_infected, :test]
       end
@@ -80,8 +82,8 @@ describe Ratonvirus do
     end
   end
 
-  context 'with scanner' do
-    it 'should return configured scanner' do
+  context "with scanner" do
+    it "returns configured scanner" do
       described_class.configure do |config|
         config.scanner = :test
       end
@@ -89,7 +91,7 @@ describe Ratonvirus do
       expect(described_class.scanner).to be_a(described_class::Scanner::Test)
     end
 
-    it 'should return a scanner configured as a class' do
+    it "returns a scanner configured as a class" do
       scanner = described_class::Scanner::Test.new
       described_class.configure do |config|
         config.scanner = scanner
@@ -98,7 +100,7 @@ describe Ratonvirus do
       expect(described_class.scanner).to equal(scanner)
     end
 
-    it 'should allow reconfiguring a scanner' do
+    it "allows reconfiguring a scanner" do
       described_class.configure do |config|
         config.scanner = :eicar
       end
@@ -114,7 +116,7 @@ describe Ratonvirus do
       expect(described_class.scanner).to be_a(described_class::Scanner::Test)
     end
 
-    it 'should store the scanner instance' do
+    it "stores the scanner instance" do
       described_class.configure do |config|
         config.scanner = :test
       end
@@ -123,7 +125,7 @@ describe Ratonvirus do
       expect(described_class.scanner).to equal(scanner)
     end
 
-    it 'should allow destroying the scanner instance' do
+    it "allows destroying the scanner instance" do
       described_class.configure do |config|
         config.scanner = :test
       end
@@ -144,8 +146,8 @@ describe Ratonvirus do
     end
   end
 
-  context 'with storage' do
-    it 'should return configured storage' do
+  context "with storage" do
+    it "returns configured storage" do
       described_class.configure do |config|
         config.storage = :filepath
       end
@@ -155,7 +157,7 @@ describe Ratonvirus do
       )
     end
 
-    it 'should return a storage configured as a class' do
+    it "returns a storage configured as a class" do
       storage = described_class::Storage::Test.new
       described_class.configure do |config|
         config.storage = storage
@@ -164,7 +166,7 @@ describe Ratonvirus do
       expect(described_class.storage).to equal(storage)
     end
 
-    it 'should allow reconfiguring a storage' do
+    it "allows reconfiguring a storage" do
       described_class.configure do |config|
         config.storage = :filepath
       end
@@ -180,7 +182,7 @@ describe Ratonvirus do
       expect(described_class.storage).to be_a(described_class::Storage::Test)
     end
 
-    it 'should store the storage instance' do
+    it "stores the storage instance" do
       described_class.configure do |config|
         config.storage = :test
       end
@@ -189,7 +191,7 @@ describe Ratonvirus do
       expect(described_class.storage).to equal(storage)
     end
 
-    it 'should allow destroying the storage instance' do
+    it "allows destroying the storage instance" do
       described_class.configure do |config|
         config.storage = :test
       end

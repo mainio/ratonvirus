@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Ratonvirus
   module Storage
     # Multi storage allows the developers to configure multiple storage backends
@@ -12,18 +14,18 @@ module Ratonvirus
       def setup
         @storages = []
 
-        if config[:storages].is_a?(Array)
-          config[:storages].each do |storage|
-            if storage.is_a?(Array)
-              type = storage[0]
-              storage_config = storage[1]
-            else
-              type = storage
-            end
+        return unless config[:storages].is_a?(Array)
 
-            cls = Ratonvirus.backend_class('Storage', type)
-            @storages << cls.new(storage_config || {})
+        config[:storages].each do |storage|
+          if storage.is_a?(Array)
+            type = storage[0]
+            storage_config = storage[1]
+          else
+            type = storage
           end
+
+          cls = Ratonvirus.backend_class("Storage", type)
+          @storages << cls.new(storage_config || {})
         end
       end
 
@@ -55,7 +57,7 @@ module Ratonvirus
 
       # Check if any of the storages accept the resource.
       def accept?(resource)
-        storage_for(resource) do |storage|
+        storage_for(resource) do |_storage|
           return true
         end
 
@@ -63,16 +65,17 @@ module Ratonvirus
       end
 
       private
-        # Iterates through the @storages array and returns the first storage
-        # that accepts the resource.
-        def storage_for(resource)
-          @storages.each do |storage|
-            if storage.accept?(resource)
-              yield storage
-              return
-            end
+
+      # Iterates through the @storages array and yields the first storage
+      # that accepts the resource.
+      def storage_for(resource)
+        @storages.each do |storage|
+          if storage.accept?(resource)
+            yield storage
+            break
           end
         end
+      end
     end
   end
 end
