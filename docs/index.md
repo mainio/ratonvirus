@@ -87,10 +87,10 @@ end
 Scanning resources:
 
 ```ruby
-if Ratonvirus.scanner.virus?('/path/to/file.pdf')
+if Ratonvirus.scanner.virus?("/path/to/file.pdf")
   puts "The file contains a virus."
 end
-if Ratonvirus.scanner.virus?(File.new('/path/to/file.pdf'))
+if Ratonvirus.scanner.virus?(File.new("/path/to/file.pdf"))
   puts "The file contains a virus."
 end
 ```
@@ -134,10 +134,10 @@ end
 Scanning resources:
 
 ```ruby
-if Ratonvirus.scanner.virus?('/path/to/file.pdf')
+if Ratonvirus.scanner.virus?("/path/to/file.pdf")
   puts "The file contains a virus."
 end
-if Ratonvirus.scanner.virus?(File.new('/path/to/file.pdf'))
+if Ratonvirus.scanner.virus?(File.new("/path/to/file.pdf"))
   puts "The file contains a virus."
 end
 if Ratonvirus.scanner.virus?(your_model.file)

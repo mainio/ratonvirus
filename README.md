@@ -26,7 +26,7 @@ end
 Running manual scans:
 
 ```ruby
-puts "File contains a virus" if Ratonvirus.scanner.virus?('/path/to/file.pdf')
+puts "File contains a virus" if Ratonvirus.scanner.virus?("/path/to/file.pdf")
 ```
 
 Manual scanning works e.g. for file uploads, file object and file paths.
@@ -68,7 +68,7 @@ environments.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'ratonvirus'
+gem "ratonvirus"
 ```
 
 And then execute:
@@ -166,7 +166,7 @@ examples:
 # It is a good idea to check first that the scanner is available.
 if Ratonvirus.scanner.available?
   # Scanning a file path
-  path = '/path/to/file.pdf'
+  path = "/path/to/file.pdf"
   if Ratonvirus.scanner.virus?(path)
     puts "There is a virus at #{path}"
   end
@@ -188,8 +188,8 @@ Here are few sample configurations to speed up the configuration process.
 Gemfile:
 
 ```ruby
-gem 'ratonvirus'
-gem 'ratonvirus-clamby'
+gem "ratonvirus"
+gem "ratonvirus-clamby"
 ```
 
 Initializer:
@@ -219,8 +219,8 @@ For installing ClamAV, refer to
 Gemfile:
 
 ```ruby
-gem 'ratonvirus'
-gem 'ratonvirus-clamby'
+gem "ratonvirus"
+gem "ratonvirus-clamby"
 ```
 
 Initializer:
