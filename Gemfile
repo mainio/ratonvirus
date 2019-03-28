@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 
 group :development, :test do
-  gem "sqlite3"
+  gem "sqlite3", "~> 1.4"
 end
 
 group :test do
