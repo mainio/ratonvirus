@@ -82,6 +82,8 @@ module Ratonvirus
           tempfile.rewind
 
           yield tempfile.path
+        rescue StandardError
+            return
         ensure
           tempfile.close!
         end
