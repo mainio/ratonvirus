@@ -135,7 +135,7 @@ describe Ratonvirus::Scanner::Base do
     it "calls .executable? exactly once when not called before" do
       expect(described_class).to receive(:executable?).and_return(true)
 
-      10.times do
+      5.times do
         subject.available?
       end
     end

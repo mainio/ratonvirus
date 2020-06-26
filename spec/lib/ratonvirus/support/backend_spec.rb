@@ -180,7 +180,7 @@ describe Ratonvirus::Support::Backend do
       it "defines an instance variable only on first call" do
         expect(subject).to receive(:create_test).and_return(true).once
 
-        10.times do
+        5.times do
           subject.test
         end
       end

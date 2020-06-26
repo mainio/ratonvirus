@@ -36,7 +36,7 @@ describe AntivirusValidator do
       a = Article.new
 
       files = []
-      10.times do
+      5.times do
         files << clean_file
       end
       a.carrierwave_files = files
@@ -50,7 +50,7 @@ describe AntivirusValidator do
       a = Article.new
 
       files = []
-      10.times do
+      5.times do
         files << infected_file
       end
       a.carrierwave_files = files
@@ -64,7 +64,7 @@ describe AntivirusValidator do
       a = Article.new
 
       files = []
-      10.times do
+      5.times do
         files << clean_file
       end
       files << infected_file
@@ -79,10 +79,10 @@ describe AntivirusValidator do
       a = Article.new
 
       files = []
-      10.times do
+      5.times do
         files << clean_file
       end
-      10.times do
+      5.times do
         files << infected_file
       end
       a.carrierwave_files = files
