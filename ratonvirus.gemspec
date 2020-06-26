@@ -26,10 +26,10 @@ Gem::Specification.new do |spec|
 
   # The activesupport dependency is used for the string manipulations done in
   # the Ratonvirus main module through ActiveSupport::Inflector.
-  spec.add_dependency "activesupport", ">= 5.0"
+  spec.add_dependency "activesupport", "~> 5.0"
 
   # Basic development dependencies.
-  spec.add_development_dependency "rake", ">= 12.3"
+  spec.add_development_dependency "rake", "~> 12.3"
   spec.add_development_dependency "rspec", "~> 3.0"
 
   # Rails integration tests
@@ -42,8 +42,8 @@ Gem::Specification.new do |spec|
   # be attached to Active Models. These are not necessary for the basic
   # functionality of this gem and all other parts of the gem should work fine
   # without them. Therefore, only needed as development dependencies.
-  spec.add_development_dependency "activemodel", ">= 5.0"
-  spec.add_development_dependency "activestorage", ">= 5.0"
+  spec.add_development_dependency "activemodel", "~> 5.0"
+  spec.add_development_dependency "activestorage", "~> 5.0"
 
   # The following dependency is needed to test the CarrierWave storage. This is
   # not required for running this gem without CarrierWave.
