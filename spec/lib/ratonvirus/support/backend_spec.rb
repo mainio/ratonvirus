@@ -54,14 +54,6 @@ describe Ratonvirus::Support::Backend do
       end
     end
 
-    context "with string backend_type" do
-      it "returns the the correct constant" do
-        expect(method.call(namespace, :base)).to equal(
-          RatonvirusTest::Foo::Base
-        )
-      end
-    end
-
     context "with unknown backend_type" do
       it "returns the the correct constant" do
         expect { method.call(namespace, :unknown) }.to raise_error(NameError)

@@ -3,19 +3,17 @@
 namespace :ratonvirus do
   desc "Tests if the antivirus scanner is available and properly configured"
   task test: :environment do
-    begin
-      if Ratonvirus.scanner.available?
-        puts "Ratonvirus correctly configured."
-      else
-        puts "Ratonvirus scanner is not available!"
-        puts ""
-        puts "Please refer to Ratonvirus documentation for proper configuration."
-      end
-    rescue StandardError
-      puts "Ratonvirus scanner is not configured."
+    if Ratonvirus.scanner.available?
+      puts "Ratonvirus correctly configured."
+    else
+      puts "Ratonvirus scanner is not available!"
       puts ""
       puts "Please refer to Ratonvirus documentation for proper configuration."
     end
+  rescue StandardError
+    puts "Ratonvirus scanner is not configured."
+    puts ""
+    puts "Please refer to Ratonvirus documentation for proper configuration."
   end
 
   desc "Scans the given file through the antivirus scanner"
