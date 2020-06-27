@@ -94,7 +94,7 @@ describe Ratonvirus::Storage::ActiveStorage do
           let(:change_attachment) { double }
 
           before do
-            expect(single_change).to receive(:attachable).and_return(change_attachable).twice
+            expect(single_change).to receive(:attachable).and_return(change_attachable)
             expect(single_change).to receive(:attachment).and_return(change_attachment)
           end
 
@@ -128,11 +128,13 @@ describe Ratonvirus::Storage::ActiveStorage do
           expect(single_change).to receive(:is_a?)
             .with(ActiveStorage::Attached::Changes::CreateMany).and_return(true)
           expect(single_change).to receive(:subchanges).and_return(subchanges)
-          expect(change1).to receive(:attachable).and_return(change_attachable_1).exactly(3).times
+          expect(change1).to receive(:attachable).and_return(change_attachable_1)
           expect(change_attachable_1).to receive(:is_a?).with(ActiveStorage::Blob).and_return(false)
+          expect(change_attachable_1).to receive(:is_a?).with(String).and_return(false)
           expect(change1).to receive(:attachment).and_return(change_attachment_1)
-          expect(change2).to receive(:attachable).and_return(change_attachable_2).exactly(3).times
+          expect(change2).to receive(:attachable).and_return(change_attachable_2)
           expect(change_attachable_2).to receive(:is_a?).with(ActiveStorage::Blob).and_return(false)
+          expect(change_attachable_2).to receive(:is_a?).with(String).and_return(false)
           expect(change2).to receive(:attachment).and_return(change_attachment_2)
         end
 
@@ -178,15 +180,11 @@ describe Ratonvirus::Storage::ActiveStorage do
     end
 
     context "when block is provided" do
-      let(:attachment) { double }
-      let(:asset) { [attachment, attachable] }
+      let(:filename) { double }
 
-      context "with an unknown asset" do
-        it "does not yield" do
-          expect(asset).to receive(:is_a?).with(Array).and_return(true)
-          expect(asset).not_to receive(:blob)
-          expect { |b| subject.asset_path(asset, &b) }.not_to yield_control
-        end
+      before do
+        expect(attachment).to receive(:filename).and_return(filename)
+        expect(filename).to receive(:extension_with_delimiter).and_return(".pdf")
       end
 
       context "with ActionDispatch::Http::UploadedFile" do
@@ -197,7 +195,7 @@ describe Ratonvirus::Storage::ActiveStorage do
 
         it "yields with with the result of `path` of the attachable" do
           expect { |b| subject.asset_path(asset, &b) }.to yield_with_args(
-            tempfile.path
+            %r{/tmp/Ratonvirus[0-9]+-[0-9]+-[0-9a-z]+\.pdf}
           )
         end
       end
@@ -207,7 +205,7 @@ describe Ratonvirus::Storage::ActiveStorage do
 
         it "yields with with the result of `path` of the attachable" do
           expect { |b| subject.asset_path(asset, &b) }.to yield_with_args(
-            attachable.path
+            %r{/tmp/Ratonvirus[0-9]+-[0-9]+-[0-9a-z]+\.pdf}
           )
         end
       end
@@ -217,11 +215,20 @@ describe Ratonvirus::Storage::ActiveStorage do
         let(:attachable) { { io: file_io } }
 
         it "yields with with the result of `path` of the attachable" do
-          filename = double
-          expect(attachment).to receive(:filename).and_return(filename)
-          expect(filename).to receive(:extension_with_delimiter).and_return(".pdf")
-
           expect { |b| subject.asset_path(asset, &b) }.to yield_control
+        end
+      end
+
+      context "with ActiveStorage::Blob" do
+        let(:attachable) { ActiveStorage::Blob.new }
+        let(:tempfile) { Tempfile.new(["RatonTest", ".txt"]) }
+
+        it "closes the file IO" do
+          expect(attachable).to receive(:open).and_yield(tempfile)
+
+          expect { |b| subject.asset_path(asset, &b) }.to yield_with_args(
+            %r{/tmp/RatonTest[0-9]+-[0-9]+-[0-9a-z]+\.txt}
+          )
         end
       end
     end
@@ -232,9 +239,44 @@ describe Ratonvirus::Storage::ActiveStorage do
     let(:attachable) { double }
     let(:asset) { [attachment, attachable] }
 
-    it "calls asset.purge" do
-      expect(attachment).to receive(:purge)
-      subject.asset_remove(asset)
+    context "with ActionDispatch::Http::UploadedFile" do
+      let(:tempfile) { Tempfile.new }
+      let(:attachable) do
+        ActionDispatch::Http::UploadedFile.new(tempfile: tempfile)
+      end
+
+      it "closes the tempfile" do
+        expect(tempfile).to receive(:close!)
+        subject.asset_remove(asset)
+      end
+    end
+
+    context "with Rack::Test::UploadedFile" do
+      let(:attachable) { fixture_file_upload("files/clean_file.pdf") }
+
+      it "closes the tempfile" do
+        expect(attachable.tempfile).to receive(:close!)
+        subject.asset_remove(asset)
+      end
+    end
+
+    context "with Hash" do
+      let(:file_io) { File.open(file_fixture("clean_file.pdf")) }
+      let(:attachable) { { io: file_io } }
+
+      it "closes the file IO" do
+        expect(file_io).to receive(:close)
+        subject.asset_remove(asset)
+      end
+    end
+
+    context "with ActiveStorage::Blob" do
+      let(:attachable) { ActiveStorage::Blob.new }
+
+      it "closes the file IO" do
+        expect(attachable).to receive(:purge)
+        subject.asset_remove(asset)
+      end
     end
   end
 
