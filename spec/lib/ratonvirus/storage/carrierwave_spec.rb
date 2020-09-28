@@ -77,7 +77,7 @@ describe Ratonvirus::Storage::Carrierwave do
       it "yields with asset.file.path when a correct resource is given" do
         file = double
         path = double
-        expect(asset).to receive(:file).twice.and_return(file)
+        expect(asset).to receive(:file).exactly(3).times.and_return(file)
         expect(file).to receive(:path).and_return(path)
         expect { |b| subject.asset_path(asset, &b) }.to yield_with_args(
           path
