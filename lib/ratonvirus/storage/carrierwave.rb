@@ -23,9 +23,8 @@ module Ratonvirus
         if asset.file.is_a?(CarrierWave::Storage::Fog::File)
           # We can't use carrierwave_uploader.cache_stored_file! as this is
           # remote too when using fog/s3.
-          @tempfile = Tempfile.new(encoding: "ascii-8bit").tap do |f|
+          @tempfile = Tempfile.new(encoding: "ascii-8bit") do |f|
             f.write(asset.read)
-            f.close
           end
 
           yield @tempfile.path
@@ -35,12 +34,16 @@ module Ratonvirus
       end
 
       def asset_remove(asset)
-        path = asset.file.path
-        asset.remove!
+        if asset.file.is_a?(CarrierWave::Storage::Fog::File)
+          @tempfile.close
+        else
+          path = asset.file.path
+          asset.remove!
 
-        # Remove the temp cache dir if it exists
-        dir = File.dirname(path)
-        FileUtils.remove_dir(dir) if File.directory?(dir)
+          # Remove the temp cache dir if it exists
+          dir = File.dirname(path)
+          FileUtils.remove_dir(dir) if File.directory?(dir)
+        end
       end
     end
   end
