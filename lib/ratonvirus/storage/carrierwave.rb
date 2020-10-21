@@ -34,16 +34,12 @@ module Ratonvirus
       end
 
       def asset_remove(asset)
-        if asset.file.is_a?(CarrierWave::Storage::Fog::File)
-          @tempfile.close
-        else
-          path = asset.file.path
-          asset.remove!
+        path = asset.file.path
+        asset.remove!
 
-          # Remove the temp cache dir if it exists
-          dir = File.dirname(path)
-          FileUtils.remove_dir(dir) if File.directory?(dir)
-        end
+        # Remove the temp cache dir if it exists
+        dir = File.dirname(path)
+        FileUtils.remove_dir(dir) if File.directory?(dir)
       end
     end
   end
