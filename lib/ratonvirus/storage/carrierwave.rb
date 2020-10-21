@@ -23,7 +23,7 @@ module Ratonvirus
         if asset.file.is_a?(CarrierWave::Storage::Fog::File)
           # We can't use carrierwave_uploader.cache_stored_file! as this is
           # remote too when using fog/s3.
-          @tempfile ||= Tempfile.new(encoding: "ascii-8bit").tap do |f|
+          @tempfile = Tempfile.new(encoding: "ascii-8bit").tap do |f|
             f.write(asset.read)
             f.close
           end
