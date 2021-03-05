@@ -44,14 +44,16 @@ describe Ratonvirus::Scanner::Base do
       let(:config) { { force_availability: false } }
 
       it "sets availability to true when scanner is executable" do
-        expect(described_class).to receive(:executable?).and_return(true)
+        allow(described_class).to receive(:executable?).and_return(true)
+        expect(described_class).to receive(:executable?)
 
         subject
         expect(subject.available?).to be(true)
       end
 
       it "sets availability to false when scanner is not executable" do
-        expect(described_class).to receive(:executable?).and_return(false)
+        allow(described_class).to receive(:executable?).and_return(false)
+        expect(described_class).to receive(:executable?)
 
         subject
         expect(subject.available?).to be(false)
@@ -133,7 +135,8 @@ describe Ratonvirus::Scanner::Base do
     let(:config) { { force_availability: false } }
 
     it "calls .executable? exactly once when not called before" do
-      expect(described_class).to receive(:executable?).and_return(true)
+      allow(described_class).to receive(:executable?).and_return(true)
+      expect(described_class).to receive(:executable?)
 
       5.times do
         subject.available?

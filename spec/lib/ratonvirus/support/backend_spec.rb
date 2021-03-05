@@ -162,7 +162,8 @@ describe Ratonvirus::Support::Backend do
     describe ".test" do
       it "defines an instance variable on first call" do
         backend = RatonvirusTest::Foo::Base.new
-        expect(subject).to receive(:create_test).and_return(backend)
+        allow(subject).to receive(:create_test).and_return(backend)
+        expect(subject).to receive(:create_test)
         expect(subject.instance_variable_get(:@test)).to be_nil
 
         subject.test

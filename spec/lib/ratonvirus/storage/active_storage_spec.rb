@@ -36,18 +36,19 @@ describe Ratonvirus::Storage::ActiveStorage do
     let(:resource) { double }
 
     it "returns true with ActiveStorage::Attached::One" do
-      expect(resource).to receive(:is_a?).with(ActiveStorage::Attached::One)
-                                         .and_return(true)
-
+      allow(resource).to receive(:is_a?).with(ActiveStorage::Attached::One)
+                                        .and_return(true)
+      expect(resource).to receive(:is_a?)
       expect(subject.accept?(resource)).to be(true)
     end
 
     it "returns true with ActiveStorage::Attached::Many" do
-      expect(resource).to receive(:is_a?).with(ActiveStorage::Attached::One)
-                                         .and_return(false)
-      expect(resource).to receive(:is_a?).with(ActiveStorage::Attached::Many)
-                                         .and_return(true)
+      allow(resource).to receive(:is_a?).with(ActiveStorage::Attached::One)
+                                        .and_return(false)
+      allow(resource).to receive(:is_a?).with(ActiveStorage::Attached::Many)
+                                        .and_return(true)
 
+      expect(resource).to receive(:is_a?).twice
       expect(subject.accept?(resource)).to be(true)
     end
   end
@@ -77,25 +78,28 @@ describe Ratonvirus::Storage::ActiveStorage do
         let(:attachment) { double }
 
         before do
-          expect(single_change).to receive(:is_a?)
-            .with(ActiveStorage::Attached::Changes::CreateOne).and_return(true)
+          allow(ActiveStorage::Attached::Changes::CreateOne).to receive(:===).with(single_change).and_return(true)
+          expect(ActiveStorage::Attached::Changes::CreateOne).to receive(:===).with(single_change)
         end
 
         context "without changed attachment" do
           it "does nothing" do
-            expect(single_change).to receive(:attachable).and_return(nil)
+            allow(single_change).to receive(:attachable).and_return(nil)
+            expect(single_change).to receive(:attachable)
 
             expect { |b| subject.process(resource, &b) }.not_to yield_control
           end
         end
 
         context "with changed attachment" do
-          let(:change_attachable) { double }
-          let(:change_attachment) { double }
+          let(:change_attachable) { double("ble") }
+          let(:change_attachment) { double("attachment") }
 
           before do
-            expect(single_change).to receive(:attachable).and_return(change_attachable)
-            expect(single_change).to receive(:attachment).and_return(change_attachment)
+            allow(single_change).to receive(:attachable).and_return(change_attachable)
+            allow(single_change).to receive(:attachment).and_return(change_attachment)
+            expect(single_change).to receive(:attachable)
+            expect(single_change).to receive(:attachment)
           end
 
           it "calls processable and yields the result" do
@@ -115,27 +119,38 @@ describe Ratonvirus::Storage::ActiveStorage do
 
       context "with ActiveStorage::Attached::Many" do
         let(:change1) { double }
-        let(:change_attachable_1) { double }
-        let(:change_attachment_1) { double }
+        let(:change_attachable1) { double }
+        let(:change_attachment1) { double }
         let(:change2) { double }
-        let(:change_attachable_2) { double }
-        let(:change_attachment_2) { double }
-        let(:subchanges) { [change1, change2] }
+        let(:change_attachable2) { double }
+        let(:change_attachment2) { double }
 
         before do
-          expect(single_change).to receive(:is_a?)
-            .with(ActiveStorage::Attached::Changes::CreateOne).and_return(false)
-          expect(single_change).to receive(:is_a?)
-            .with(ActiveStorage::Attached::Changes::CreateMany).and_return(true)
-          expect(single_change).to receive(:subchanges).and_return(subchanges)
-          expect(change1).to receive(:attachable).and_return(change_attachable_1)
-          expect(change_attachable_1).to receive(:is_a?).with(ActiveStorage::Blob).and_return(false)
-          expect(change_attachable_1).to receive(:is_a?).with(String).and_return(false)
-          expect(change1).to receive(:attachment).and_return(change_attachment_1)
-          expect(change2).to receive(:attachable).and_return(change_attachable_2)
-          expect(change_attachable_2).to receive(:is_a?).with(ActiveStorage::Blob).and_return(false)
-          expect(change_attachable_2).to receive(:is_a?).with(String).and_return(false)
-          expect(change2).to receive(:attachment).and_return(change_attachment_2)
+          allow(ActiveStorage::Attached::Changes::CreateOne).to receive(:===)
+            .with(single_change).and_return(false)
+          expect(ActiveStorage::Attached::Changes::CreateOne).to receive(:===)
+            .with(single_change)
+          allow(ActiveStorage::Attached::Changes::CreateMany).to receive(:===)
+            .with(single_change).and_return(true)
+          expect(ActiveStorage::Attached::Changes::CreateMany).to receive(:===)
+            .with(single_change)
+
+          allow(single_change).to receive(:subchanges).and_return([change1, change2])
+          expect(single_change).to receive(:subchanges)
+          allow(change1).to receive(:attachable).and_return(change_attachable1)
+          expect(change1).to receive(:attachable)
+          allow(change_attachable1).to receive(:is_a?).with(ActiveStorage::Blob).and_return(false)
+          allow(change_attachable1).to receive(:is_a?).with(String).and_return(false)
+          expect(change_attachable1).to receive(:is_a?).twice
+          allow(change1).to receive(:attachment).and_return(change_attachment1)
+          allow(change2).to receive(:attachable).and_return(change_attachable2)
+          expect(change1).to receive(:attachment)
+          expect(change2).to receive(:attachable)
+          allow(change_attachable2).to receive(:is_a?).with(ActiveStorage::Blob).and_return(false)
+          allow(change_attachable2).to receive(:is_a?).with(String).and_return(false)
+          expect(change_attachable2).to receive(:is_a?).twice
+          allow(change2).to receive(:attachment).and_return(change_attachment2)
+          expect(change2).to receive(:attachment)
         end
 
         it "calls processable and yields the result" do
@@ -148,16 +163,17 @@ describe Ratonvirus::Storage::ActiveStorage do
         it "calls processable for all changes and yields the correct resources" do
           index = 1
           subject.process(resource) do |processable|
-            if index == 1
+            case index
+            when 1
               asset = processable.instance_variable_get(:@asset)
               expect(asset).to be_a(Array)
-              expect(asset[0]).to eq(change_attachment_1)
-              expect(asset[1]).to eq(change_attachable_1)
-            elsif index == 2
+              expect(asset[0]).to eq(change_attachment1)
+              expect(asset[1]).to eq(change_attachable1)
+            when 2
               asset = processable.instance_variable_get(:@asset)
               expect(asset).to be_a(Array)
-              expect(asset[0]).to eq(change_attachment_2)
-              expect(asset[1]).to eq(change_attachable_2)
+              expect(asset[0]).to eq(change_attachment2)
+              expect(asset[1]).to eq(change_attachable2)
             end
 
             index += 1
@@ -183,8 +199,10 @@ describe Ratonvirus::Storage::ActiveStorage do
       let(:filename) { double }
 
       before do
-        expect(attachment).to receive(:filename).and_return(filename)
-        expect(filename).to receive(:extension_with_delimiter).and_return(".pdf")
+        allow(attachment).to receive(:filename).and_return(filename)
+        allow(filename).to receive(:extension_with_delimiter).and_return(".pdf")
+        expect(attachment).to receive(:filename)
+        expect(filename).to receive(:extension_with_delimiter)
       end
 
       context "with ActionDispatch::Http::UploadedFile" do
@@ -224,7 +242,8 @@ describe Ratonvirus::Storage::ActiveStorage do
         let(:tempfile) { Tempfile.new(["RatonTest", ".txt"]) }
 
         it "closes the file IO" do
-          expect(attachable).to receive(:open).and_yield(tempfile)
+          allow(attachable).to receive(:open).and_yield(tempfile)
+          expect(attachable).to receive(:open)
 
           expect { |b| subject.asset_path(asset, &b) }.to yield_with_args(
             %r{/tmp/RatonTest[0-9]+-[0-9]+-[0-9a-z]+\.txt}

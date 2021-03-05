@@ -108,7 +108,8 @@ describe Ratonvirus::Scanner::Support::Callbacks do
 
       it "returns the result of the block" do
         result = ("a".."z").to_a.shuffle.join
-        expect(subject).to receive(:do_something).and_return(result)
+        allow(subject).to receive(:do_something).and_return(result)
+        expect(subject).to receive(:do_something)
 
         run_result = run.call :hook do
           subject.do_something

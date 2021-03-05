@@ -88,37 +88,37 @@ module Ratonvirus
       def define_backend(backend_type, backend_subclass)
         class_eval <<-CODE, __FILE__, __LINE__ + 1
           # Getter for #{backend_type}
-          def self.#{backend_type}
-            @#{backend_type} ||= create_#{backend_type}
-          end
+          def self.#{backend_type}                      # def self.foo
+            @#{backend_type} ||= create_#{backend_type} #   @foo ||= create_foo
+          end                                           # end
 
           # Setter for #{backend_type}
-          def self.#{backend_type}=(#{backend_type}_value)
-            set_backend(
-              :#{backend_type},
-              "#{backend_subclass}",
-              #{backend_type}_value
-            )
-          end
+          def self.#{backend_type}=(#{backend_type}_value) # def self.foo=(foo_value)
+            set_backend(                                   #   set_backend(
+              :#{backend_type},                            #     :foo
+              "#{backend_subclass}",                       #     "Foo"
+              #{backend_type}_value                        #     foo_value
+            )                                              #   )
+          end                                              # end
 
           # Destroys the currently active #{backend_type}.
           # The #{backend_type} is re-initialized when the getter is called.
-          def self.destroy_#{backend_type}
-            @#{backend_type} = nil
-          end
+          def self.destroy_#{backend_type} # def self.destroy_foo
+            @#{backend_type} = nil         #   @foo = nil
+          end                              # end
 
           # Creates a new backend instance
           # private
-          def self.create_#{backend_type}
-            if @#{backend_type}_defs.nil?
-              raise NotDefinedError.new("#{backend_subclass} not defined!")
-            end
-
-            @#{backend_type}_defs[:klass].new(
-              @#{backend_type}_defs[:config]
-            )
-          end
-          private_class_method :create_#{backend_type}
+          def self.create_#{backend_type}                                   # def self.create_foo
+            if @#{backend_type}_defs.nil?                                   #   if @foo_defs.nil?
+              raise NotDefinedError.new("#{backend_subclass} not defined!") #     raise NotDefinedError.new("Foo not defined")
+            end                                                             #   end
+                                                                            #
+            @#{backend_type}_defs[:klass].new(                              #   @foo_defs[:klass].new(
+              @#{backend_type}_defs[:config]                                #     @foo_defs[:config]
+            )                                                               #   )
+          end                                                               # end
+          private_class_method :create_#{backend_type}                      # private_class_method :create_foo
         CODE
       end
 
@@ -154,12 +154,13 @@ module Ratonvirus
           subtype = backend_value.class
           config = backend_value.config
         else
-          if backend_value.is_a?(Array)
+          case backend_value
+          when Array
             subtype = backend_value.shift
             config = backend_value.shift || {}
 
             raise InvalidError, "Invalid #{backend_type} type: #{subtype}" unless subtype.is_a?(Symbol)
-          elsif backend_value.is_a?(Symbol)
+          when Symbol
             subtype = backend_value
             config = {}
           else

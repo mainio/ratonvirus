@@ -28,7 +28,8 @@ describe Ratonvirus::Scanner::Addon::RemoveInfected do
 
     describe "when virus is not detected" do
       before do
-        expect(subject).to receive(:errors).and_return([])
+        allow(subject).to receive(:errors).and_return([])
+        expect(subject).to receive(:errors)
       end
 
       it "does not call storage" do
@@ -39,9 +40,10 @@ describe Ratonvirus::Scanner::Addon::RemoveInfected do
 
     context "when virus is detected" do
       before do
-        expect(subject).to receive(:errors).and_return(
+        allow(subject).to receive(:errors).and_return(
           [:antivirus_virus_detected]
         )
+        expect(subject).to receive(:errors)
       end
 
       it "calls storage.remove with the given resource" do

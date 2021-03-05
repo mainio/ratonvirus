@@ -22,9 +22,10 @@ module Ratonvirus
 
         change = resource.record.attachment_changes[resource.name]
 
-        if change.is_a?(::ActiveStorage::Attached::Changes::CreateOne)
+        case change
+        when ::ActiveStorage::Attached::Changes::CreateOne
           handle_create_one(change, &block)
-        elsif change.is_a?(::ActiveStorage::Attached::Changes::CreateMany)
+        when ::ActiveStorage::Attached::Changes::CreateMany
           handle_create_many(change, &block)
         end
       end

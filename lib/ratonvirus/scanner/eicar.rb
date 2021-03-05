@@ -19,11 +19,11 @@ module Ratonvirus
       protected
 
       def run_scan(path)
-        if !File.file?(path)
-          errors << :antivirus_file_not_found
-        else
+        if File.file?(path)
           sha256 = Digest::SHA256.file path
           errors << :antivirus_virus_detected if sha256 == EICAR_SHA256
+        else
+          errors << :antivirus_file_not_found
         end
       rescue StandardError
         errors << :antivirus_client_error

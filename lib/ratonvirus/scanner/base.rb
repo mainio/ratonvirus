@@ -11,8 +11,8 @@ module Ratonvirus
         end
       end
 
-      attr_reader :config
-      attr_reader :errors # Only available after `virus?` has been called.
+      # :errors - Only available after `virus?` has been called.
+      attr_reader :config, :errors
 
       def initialize(configuration = {})
         @config = default_config.merge!(configuration)

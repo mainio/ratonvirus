@@ -14,7 +14,8 @@ describe Ratonvirus::Storage::Filepath do
 
       context "and attribute has changed" do
         it "returns expected result" do
-          expect(record).to receive(:x_changed?).and_return(true)
+          allow(record).to receive(:x_changed?).and_return(true)
+          expect(record).to receive(:x_changed?)
           expect(record).not_to receive(:changed?)
 
           expect(subject.changed?(record, :x)).to be(true)
@@ -23,7 +24,8 @@ describe Ratonvirus::Storage::Filepath do
 
       context "and attribute has not changed" do
         it "returns expected result" do
-          expect(record).to receive(:x_changed?).and_return(false)
+          allow(record).to receive(:x_changed?).and_return(false)
+          expect(record).to receive(:x_changed?)
           expect(record).not_to receive(:changed?)
 
           expect(subject.changed?(record, :x)).to be(false)
@@ -153,7 +155,8 @@ describe Ratonvirus::Storage::Filepath do
 
       context "with asset responding true to .empty?" do
         before do
-          expect(asset).to receive(:empty?).and_return(true)
+          allow(asset).to receive(:empty?).and_return(true)
+          expect(asset).to receive(:empty?)
         end
 
         it "does not call asset.respond_to?" do
@@ -164,7 +167,8 @@ describe Ratonvirus::Storage::Filepath do
 
       context "with asset responding false to .empty?" do
         before do
-          expect(asset).to receive(:empty?).and_return(false)
+          allow(asset).to receive(:empty?).and_return(false)
+          expect(asset).to receive(:empty?)
         end
 
         context "and asset not responding to .path" do
@@ -180,8 +184,10 @@ describe Ratonvirus::Storage::Filepath do
 
           it "yields with the response of asset.path" do
             # Call to asset.path
-            expect(asset).to receive(:path).and_return(path)
-            expect(path).to receive(:empty?).and_return(false)
+            allow(asset).to receive(:path).and_return(path)
+            expect(asset).to receive(:path)
+            allow(path).to receive(:empty?).and_return(false)
+            expect(path).to receive(:empty?)
 
             expect { |b| subject.asset_path(asset, &b) }.to(
               yield_with_args(path)
@@ -196,13 +202,15 @@ describe Ratonvirus::Storage::Filepath do
     let(:asset) { double }
 
     it "does not remove the asset when it is not a file" do
-      expect(File).to receive(:file?).and_return(false)
+      allow(File).to receive(:file?).and_return(false)
+      expect(File).to receive(:file?)
       expect(FileUtils).not_to receive(:remove_file)
       subject.asset_remove(asset)
     end
 
     it "removes the asset when it is a file" do
-      expect(File).to receive(:file?).and_return(true)
+      allow(File).to receive(:file?).and_return(true)
+      expect(File).to receive(:file?)
       expect(FileUtils).to receive(:remove_file).with(asset)
       subject.asset_remove(asset)
     end

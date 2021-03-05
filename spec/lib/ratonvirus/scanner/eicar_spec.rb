@@ -23,8 +23,12 @@ describe Ratonvirus::Scanner::Eicar do
       end
 
       context "when there is an exception" do
+        before do
+          allow(Digest::SHA256).to receive(:file).and_raise("Example")
+        end
+
         it "results to antivirus_client_error error" do
-          expect(Digest::SHA256).to receive(:file).and_raise("Example")
+          expect(Digest::SHA256).to receive(:file)
           expect(subject.virus?(path)).to be(true)
           expect(subject.errors).to contain_exactly(:antivirus_client_error)
         end
@@ -40,8 +44,12 @@ describe Ratonvirus::Scanner::Eicar do
       end
 
       context "when there is an exception" do
+        before do
+          allow(Digest::SHA256).to receive(:file).and_raise("Example")
+        end
+
         it "results to antivirus_client_error error" do
-          expect(Digest::SHA256).to receive(:file).and_raise("Example")
+          expect(Digest::SHA256).to receive(:file)
           expect(subject.virus?(path)).to be(true)
           expect(subject.errors).to contain_exactly(:antivirus_client_error)
         end

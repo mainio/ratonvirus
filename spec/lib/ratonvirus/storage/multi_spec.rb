@@ -94,15 +94,17 @@ describe Ratonvirus::Storage::Multi do
 
     context "when block is given" do
       let(:storage) { double }
-      let(:block) { proc {} }
+      let(:block) { proc { "" } }
 
       before do
-        expect(subject).to receive(:storage_for)
+        allow(subject).to receive(:storage_for)
           .with(resource).and_yield(storage)
+        expect(subject).to receive(:storage_for).with(resource)
       end
 
       it "calls process on the underlying storage" do
-        expect(storage).to receive(:process).with(resource, &block)
+        allow(storage).to receive(:process).with(resource, &block)
+        expect(storage).to receive(:process).with(resource)
         subject.process(resource, &block)
       end
     end
@@ -114,8 +116,9 @@ describe Ratonvirus::Storage::Multi do
     let(:resource) { double }
 
     before do
-      expect(record).to receive(:public_send)
+      allow(record).to receive(:public_send)
         .with(attribute).and_return(resource)
+      expect(record).to receive(:public_send).with(attribute)
     end
 
     context "when storage_for does not yield" do
@@ -129,14 +132,16 @@ describe Ratonvirus::Storage::Multi do
       let(:storage) { double }
 
       before do
-        expect(subject).to receive(:storage_for)
+        allow(subject).to receive(:storage_for)
           .with(resource).and_yield(storage)
+        expect(subject).to receive(:storage_for).with(resource)
       end
 
       it "calls changed? on the underlying storage" do
         changed = double
-        expect(storage).to receive(:changed?)
+        allow(storage).to receive(:changed?)
           .with(record, attribute).and_return(changed)
+        expect(storage).to receive(:changed?).with(record, attribute)
 
         expect(subject.changed?(record, attribute)).to be(changed)
       end
@@ -157,8 +162,9 @@ describe Ratonvirus::Storage::Multi do
       let(:storage) { double }
 
       it "returns true" do
-        expect(subject).to receive(:storage_for)
+        allow(subject).to receive(:storage_for)
           .with(resource).and_yield(storage)
+        expect(subject).to receive(:storage_for).with(resource)
         expect(subject.accept?(resource)).to be(true)
       end
     end
@@ -180,7 +186,8 @@ describe Ratonvirus::Storage::Multi do
         let(:storages) { [storage] }
 
         it "does not yield if storage.accept? returns false" do
-          expect(storage).to receive(:accept?).with(resource).and_return(false)
+          allow(storage).to receive(:accept?).with(resource).and_return(false)
+          expect(storage).to receive(:accept?).with(resource)
           expect { |b| method.call(resource, &b) }.not_to yield_control
         end
       end
@@ -192,7 +199,8 @@ describe Ratonvirus::Storage::Multi do
         let(:storages) { [storage1, storage2, storage3] }
 
         it "yields only on the first storage if it accepts the resource" do
-          expect(storage1).to receive(:accept?).with(resource).and_return(true)
+          allow(storage1).to receive(:accept?).with(resource).and_return(true)
+          expect(storage1).to receive(:accept?).with(resource)
           expect(storage2).not_to receive(:accept?)
           expect(storage3).not_to receive(:accept?)
 
@@ -200,25 +208,33 @@ describe Ratonvirus::Storage::Multi do
         end
 
         it "yields on the first and second storage if second one accepts the resource" do
-          expect(storage1).to receive(:accept?).with(resource).and_return(false)
-          expect(storage2).to receive(:accept?).with(resource).and_return(true)
+          allow(storage1).to receive(:accept?).with(resource).and_return(false)
+          expect(storage1).to receive(:accept?).with(resource)
+          allow(storage2).to receive(:accept?).with(resource).and_return(true)
+          expect(storage2).to receive(:accept?).with(resource)
           expect(storage3).not_to receive(:accept?)
 
           expect { |b| method.call(resource, &b) }.to yield_with_args(storage2)
         end
 
         it "yields on all the storages if the last one accepts the resource" do
-          expect(storage1).to receive(:accept?).with(resource).and_return(false)
-          expect(storage2).to receive(:accept?).with(resource).and_return(false)
-          expect(storage3).to receive(:accept?).with(resource).and_return(true)
+          allow(storage1).to receive(:accept?).with(resource).and_return(false)
+          expect(storage1).to receive(:accept?).with(resource)
+          allow(storage2).to receive(:accept?).with(resource).and_return(false)
+          expect(storage2).to receive(:accept?).with(resource)
+          allow(storage3).to receive(:accept?).with(resource).and_return(true)
+          expect(storage3).to receive(:accept?).with(resource)
 
           expect { |b| method.call(resource, &b) }.to yield_with_args(storage3)
         end
 
         it "does not yield if all the storages reject the resource" do
-          expect(storage1).to receive(:accept?).with(resource).and_return(false)
-          expect(storage2).to receive(:accept?).with(resource).and_return(false)
-          expect(storage3).to receive(:accept?).with(resource).and_return(false)
+          allow(storage1).to receive(:accept?).with(resource).and_return(false)
+          expect(storage1).to receive(:accept?).with(resource)
+          allow(storage2).to receive(:accept?).with(resource).and_return(false)
+          expect(storage2).to receive(:accept?).with(resource)
+          allow(storage3).to receive(:accept?).with(resource).and_return(false)
+          expect(storage3).to receive(:accept?).with(resource)
 
           expect { |b| method.call(resource, &b) }.not_to yield_control
         end

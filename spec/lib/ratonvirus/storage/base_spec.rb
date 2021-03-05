@@ -105,8 +105,9 @@ describe Ratonvirus::Storage::Base do
     let(:processable) { double }
 
     it "calls Processable.new with correct arguments" do
-      expect(Ratonvirus::Processable).to receive(:new)
+      allow(Ratonvirus::Processable).to receive(:new)
         .with(subject, asset).and_return(processable)
+      expect(Ratonvirus::Processable).to receive(:new).with(subject, asset)
 
       expect(method.call(asset)).to equal(processable)
     end

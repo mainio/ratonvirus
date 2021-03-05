@@ -14,8 +14,9 @@ describe Ratonvirus::Processable do
     end
 
     it "when block is provided calls storage.asset_path" do
-      block = proc {}
-      expect(storage).to receive(:asset_path).with(asset, &block)
+      block = proc { "" }
+      allow(storage).to receive(:asset_path).with(asset, &block)
+      expect(storage).to receive(:asset_path)
       subject.path(&block)
     end
   end
