@@ -2,6 +2,7 @@ require: rubocop-rspec
 
 # Common configuration.
 AllCops:
+  NewCops: enable
   Include:
     - .simplecov
     - "**/*.rb"
@@ -62,11 +63,7 @@ AllCops:
   # Else if .ruby-version exists and it contains an MRI version it is used.
   # Otherwise we fallback to the oldest officially supported Ruby version (2.0).
   TargetRubyVersion: 2.5
-
-  RSpec:
-    Patterns:
-      - "(?:^|/)spec/"
-      - "(?:^|/)test/"
+  SuggestExtensions: false
 
 # Indent private/protected/public as deep as method definitions
 Layout/AccessModifierIndentation:
@@ -1117,18 +1114,6 @@ Metrics/ModuleLength:
 Metrics/CyclomaticComplexity:
   Max: 9
 
-Metrics/LineLength:
-  Max: 180
-  # To make it possible to copy or click on URIs in the code, we allow lines
-  # containing a URI to be longer than Max.
-  AllowHeredoc: true
-  AllowURI: true
-  URISchemes:
-    - http
-    - https
-  Exclude:
-    - "**/spec/**/*"
-
 Metrics/MethodLength:
   CountComments: false  # count full line comments?
   Max: 15
@@ -1182,6 +1167,18 @@ Layout/DefEndAlignment:
   # keyword on the same line.
   EnforcedStyleAlignWith: start_of_line
   AutoCorrect: false
+
+Layout/LineLength:
+  Max: 180
+  # To make it possible to copy or click on URIs in the code, we allow lines
+  # containing a URI to be longer than Max.
+  AllowHeredoc: true
+  AllowURI: true
+  URISchemes:
+    - http
+    - https
+  Exclude:
+    - "**/spec/**/*"
 
 Lint/InheritException:
   # The default base class in favour of `Exception`.
