@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "spec_helper_carrierwave"
+require "rails_helper"
 
 describe Ratonvirus::Storage::Carrierwave do
   describe "#changed?" do
@@ -56,6 +56,7 @@ describe Ratonvirus::Storage::Carrierwave do
 
   describe "#asset_path" do
     let(:asset) { double }
+    let(:clean_file) { File.new(ratonvirus_file_fixture("clean_file.pdf"), "r") }
 
     context "when a block is not given" do
       it "does nothing" do
@@ -70,18 +71,42 @@ describe Ratonvirus::Storage::Carrierwave do
       end
 
       it "does not yield with asset.file returning nil" do
-        expect(asset).to receive(:file).and_return(nil)
+        allow(asset).to receive(:file).and_return(nil)
         expect { |b| subject.asset_path(asset, &b) }.not_to yield_control
       end
 
-      it "yields with asset.file.path when a correct resource is given" do
-        file = double
-        path = double
-        expect(asset).to receive(:file).twice.and_return(file)
-        expect(file).to receive(:path).and_return(path)
+      it "yields with with a temp path of the copy of the asset" do
+        expect(asset).to receive(:file).exactly(4).times.and_return(clean_file)
         expect { |b| subject.asset_path(asset, &b) }.to yield_with_args(
-          path
+          %r{/tmp/Ratonvirus[0-9]+-[0-9]+-[0-9a-z]+\.pdf}
         )
+      end
+
+      context "with Fog backend" do
+        let(:record) { Article.new(carrierwave_file: clean_file) }
+        let(:uploader) { record.carrierwave_file }
+        let(:fog_file) do
+          CarrierWave::Storage::Fog::File.new(
+            uploader,
+            uploader.class.storage.new(uploader),
+            uploader.store_path
+          )
+        end
+
+        before do
+          # In order for Fog to read the file, we would have to configure and
+          # stub a lot of stuff to emulate the cloud connection. To make things
+          # easier, just stub the `#read` method for the file and return the
+          # file contents.
+          allow(fog_file).to receive(:read).and_return(clean_file.read)
+        end
+
+        it "yields with with a temp path of the copy of the asset" do
+          expect(asset).to receive(:file).exactly(4).times.and_return(fog_file)
+          expect { |b| subject.asset_path(asset, &b) }.to yield_with_args(
+            %r{/tmp/Ratonvirus[0-9]+-[0-9]+-[0-9a-z]+\.pdf}
+          )
+        end
       end
     end
   end
