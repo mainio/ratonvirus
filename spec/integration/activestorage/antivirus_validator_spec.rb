@@ -3,19 +3,19 @@
 require "rails_helper"
 
 describe AntivirusValidator do
-  let(:clean_file) { Rack::Test::UploadedFile.new(file_fixture("clean_file.pdf"), "application/pdf") }
-  let(:clean_file_io) { File.open(file_fixture("clean_file.pdf")) }
+  let(:clean_file) { Rack::Test::UploadedFile.new(ratonvirus_file_fixture("clean_file.pdf"), "application/pdf") }
+  let(:clean_file_io) { File.open(ratonvirus_file_fixture("clean_file.pdf")) }
   let(:clean_file_blob) do
     ActiveStorage::Blob.create_and_upload!(
-      io: File.open(file_fixture("clean_file.pdf")),
+      io: File.open(ratonvirus_file_fixture("clean_file.pdf")),
       filename: "clean_file.pdf"
     )
   end
-  let(:infected_file) { Rack::Test::UploadedFile.new(file_fixture("infected_file.pdf"), "application/pdf") }
-  let(:infected_file_io) { File.open(file_fixture("infected_file.pdf")) }
+  let(:infected_file) { Rack::Test::UploadedFile.new(ratonvirus_file_fixture("infected_file.pdf"), "application/pdf") }
+  let(:infected_file_io) { File.open(ratonvirus_file_fixture("infected_file.pdf")) }
   let(:infected_file_blob) do
     ActiveStorage::Blob.create_and_upload!(
-      io: File.open(file_fixture("infected_file.pdf")),
+      io: File.open(ratonvirus_file_fixture("infected_file.pdf")),
       filename: "infected_file.pdf"
     )
   end

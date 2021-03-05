@@ -201,7 +201,7 @@ describe Ratonvirus::Storage::ActiveStorage do
       end
 
       context "with Rack::Test::UploadedFile" do
-        let(:attachable) { Rack::Test::UploadedFile.new(file_fixture("clean_file.pdf"), "application/pdf") }
+        let(:attachable) { Rack::Test::UploadedFile.new(ratonvirus_file_fixture("clean_file.pdf"), "application/pdf") }
 
         it "yields with with the result of `path` of the attachable" do
           expect { |b| subject.asset_path(asset, &b) }.to yield_with_args(
@@ -211,7 +211,7 @@ describe Ratonvirus::Storage::ActiveStorage do
       end
 
       context "with Hash" do
-        let(:file_io) { File.open(file_fixture("clean_file.pdf")) }
+        let(:file_io) { File.open(ratonvirus_file_fixture("clean_file.pdf")) }
         let(:attachable) { { io: file_io } }
 
         it "yields with with the result of `path` of the attachable" do
@@ -252,7 +252,7 @@ describe Ratonvirus::Storage::ActiveStorage do
     end
 
     context "with Rack::Test::UploadedFile" do
-      let(:attachable) { Rack::Test::UploadedFile.new(file_fixture("clean_file.pdf"), "application/pdf") }
+      let(:attachable) { Rack::Test::UploadedFile.new(ratonvirus_file_fixture("clean_file.pdf"), "application/pdf") }
 
       it "closes the tempfile" do
         expect(attachable.tempfile).to receive(:close!)
@@ -261,7 +261,7 @@ describe Ratonvirus::Storage::ActiveStorage do
     end
 
     context "with Hash" do
-      let(:file_io) { File.open(file_fixture("clean_file.pdf")) }
+      let(:file_io) { File.open(ratonvirus_file_fixture("clean_file.pdf")) }
       let(:attachable) { { io: file_io } }
 
       it "closes the file IO" do
