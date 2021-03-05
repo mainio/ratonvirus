@@ -3,7 +3,7 @@
 Rails antivirus made easy.
 Developed by [Mainio Tech](https://www.mainiotech.fi/).
 
-[![Build Status](https://travis-ci.org/mainio/ratonvirus.svg?branch=master)](https://travis-ci.org/mainio/ratonvirus)
+[![Build Status](https://travis-ci.com/mainio/ratonvirus.svg?branch=master)](https://travis-ci.com/mainio/ratonvirus)
 [![codecov](https://codecov.io/gh/mainio/ratonvirus/branch/master/graph/badge.svg)](https://codecov.io/gh/mainio/ratonvirus)
 
 Ratonvirus allows your Rails application to rat on the viruses that your users
