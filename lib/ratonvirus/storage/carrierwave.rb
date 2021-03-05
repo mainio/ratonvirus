@@ -3,6 +3,8 @@
 module Ratonvirus
   module Storage
     class Carrierwave < Base
+      include Ratonvirus::Storage::Support::IoHandling
+
       def changed?(record, attribute)
         record.public_send :"#{attribute}_changed?"
       end
@@ -15,12 +17,22 @@ module Ratonvirus
         end
       end
 
-      def asset_path(asset)
+      def asset_path(asset, &block)
         return unless block_given?
         return if asset.nil?
         return if asset.file.nil?
 
-        yield asset.file.path
+        # If the file is a local SanitizedFile, it is faster to run the scan
+        # directly against that file instead of copying it to a tempfile first
+        # as below for external file storages.
+        return yield asset.file.path if asset.file.is_a?(::CarrierWave::SanitizedFile)
+
+        # The file could be externally stored, so we need to read it to memory
+        # in order to create a temporary file for the scanner to perform the
+        # scan on.
+        io = StringIO.new(asset.file.read)
+        ext = File.extname(asset.file.path)
+        io_path(io, ext, &block)
       end
 
       def asset_remove(asset)
