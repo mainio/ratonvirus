@@ -201,7 +201,7 @@ describe Ratonvirus::Storage::ActiveStorage do
       end
 
       context "with Rack::Test::UploadedFile" do
-        let(:attachable) { fixture_file_upload("files/clean_file.pdf") }
+        let(:attachable) { Rack::Test::UploadedFile.new(file_fixture("clean_file.pdf"), "application/pdf") }
 
         it "yields with with the result of `path` of the attachable" do
           expect { |b| subject.asset_path(asset, &b) }.to yield_with_args(
@@ -252,7 +252,7 @@ describe Ratonvirus::Storage::ActiveStorage do
     end
 
     context "with Rack::Test::UploadedFile" do
-      let(:attachable) { fixture_file_upload("files/clean_file.pdf") }
+      let(:attachable) { Rack::Test::UploadedFile.new(file_fixture("clean_file.pdf"), "application/pdf") }
 
       it "closes the tempfile" do
         expect(attachable.tempfile).to receive(:close!)

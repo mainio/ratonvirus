@@ -3,8 +3,8 @@
 require "rails_helper"
 
 describe AntivirusValidator do
-  let(:clean_file) { fixture_file_upload("files/clean_file.pdf") }
-  let(:infected_file) { fixture_file_upload("files/infected_file.pdf") }
+  let(:clean_file) { Rack::Test::UploadedFile.new(file_fixture("clean_file.pdf"), "application/pdf") }
+  let(:infected_file) { Rack::Test::UploadedFile.new(file_fixture("infected_file.pdf"), "application/pdf") }
 
   before do
     Ratonvirus.configure do |config|
