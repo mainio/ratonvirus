@@ -4,7 +4,6 @@
 require "active_model"
 require "active_storage"
 require_relative "../app/validators/antivirus_validator"
-require "tempfile"
 
 # Default spec helper
 require "spec_helper"
