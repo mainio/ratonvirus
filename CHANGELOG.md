@@ -1,3 +1,14 @@
+# v0.3.0
+
+Changed:
+
+- Minimum Ruby version is now set to 2.5
+
+Fixed:
+
+- Issue related with scanning files with CarrierWave storage engine using remote storage engines such as Fog. Related
+  to [#9](https://github.com/mainio/ratonvirus/pull/9)
+
 # v0.2.0
 
 Support for Rails 6
