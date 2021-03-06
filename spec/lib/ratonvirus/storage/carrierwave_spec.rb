@@ -121,31 +121,39 @@ describe Ratonvirus::Storage::Carrierwave do
 
     before do
       allow(asset).to receive(:file).and_return(file)
-      expect(asset).to receive(:file)
+      expect(asset).to receive(:file).twice
       allow(file).to receive(:path).and_return(path)
       expect(file).to receive(:path)
       expect(asset).to receive(:remove!)
-      allow(File).to receive(:dirname).with(path).and_return(dir)
-      expect(File).to receive(:dirname).with(path)
+      expect(file).to receive(:is_a?).with(::CarrierWave::SanitizedFile)
     end
 
-    context "with correct folder" do
-      it "calls asset.remove! and removes its folder" do
-        allow(File).to receive(:directory?).with(dir).and_return(true)
-        expect(File).to receive(:directory?).with(dir)
-        expect(FileUtils).to receive(:remove_dir).with(dir)
-
-        subject.asset_remove(asset)
+    context "when the asset is a CarrierWave::SanitizedFile" do
+      before do
+        allow(file).to receive(:is_a?)
+          .with(::CarrierWave::SanitizedFile).and_return(true)
+        allow(File).to receive(:dirname).with(path).and_return(dir)
+        expect(File).to receive(:dirname).with(path)
       end
-    end
 
-    context "with incorrect folder" do
-      it "calls asset.remove! and does not remove its folder" do
-        allow(File).to receive(:directory?).with(dir).and_return(false)
-        expect(File).to receive(:directory?).with(dir)
-        expect(FileUtils).not_to receive(:remove_dir)
+      context "with correct folder" do
+        it "calls asset.remove! and removes its folder" do
+          allow(File).to receive(:directory?).with(dir).and_return(true)
+          expect(File).to receive(:directory?).with(dir)
+          expect(FileUtils).to receive(:remove_dir).with(dir)
 
-        subject.asset_remove(asset)
+          subject.asset_remove(asset)
+        end
+      end
+
+      context "with incorrect folder" do
+        it "calls asset.remove! and does not remove its folder" do
+          allow(File).to receive(:directory?).with(dir).and_return(false)
+          expect(File).to receive(:directory?).with(dir)
+          expect(FileUtils).not_to receive(:remove_dir)
+
+          subject.asset_remove(asset)
+        end
       end
     end
   end
