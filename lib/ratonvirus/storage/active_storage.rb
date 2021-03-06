@@ -83,7 +83,7 @@ module Ratonvirus
 
           yield tempfile.path
         rescue StandardError
-            return
+          return
         ensure
           tempfile.close!
         end
