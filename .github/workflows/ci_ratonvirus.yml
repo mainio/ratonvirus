@@ -1,5 +1,9 @@
 name: "[CI] Ratonvirus"
-on: [push, pull_request]
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
 
 env:
   CODECOV: "true"
