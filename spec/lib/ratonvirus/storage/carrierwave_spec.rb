@@ -156,5 +156,25 @@ describe Ratonvirus::Storage::Carrierwave do
         end
       end
     end
+
+    context "when the asset is a CarrierWave::Storage::Fog::File" do
+      let(:clean_file) { File.new(ratonvirus_file_fixture("clean_file.pdf"), "r") }
+      let(:record) { Article.new(carrierwave_file: clean_file) }
+      let(:uploader) { record.carrierwave_file }
+      let(:file) do
+        CarrierWave::Storage::Fog::File.new(
+          uploader,
+          uploader.class.storage.new(uploader),
+          uploader.store_path
+        )
+      end
+
+      it "calls asset.remove! and does not remove its folder" do
+        expect(File).not_to receive(:directory?)
+        expect(FileUtils).not_to receive(:remove_dir)
+
+        subject.asset_remove(asset)
+      end
+    end
   end
 end
