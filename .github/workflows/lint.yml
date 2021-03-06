@@ -21,9 +21,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-      - name: Rubocop
-        uses: reviewdog/action-rubocop@v1
-        with:
-          rubocop_version: gemfile
-          rubocop_extensions: rubocop-rails:gemfile rubocop-rspec:gemfile
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install dependencies
+        run: bundle install --jobs 4 --retry 3
+      - name: Run Rubocop
+        run: bundle exec rubocop -P
