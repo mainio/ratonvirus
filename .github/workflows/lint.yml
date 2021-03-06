@@ -21,5 +21,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+      - name: Install dependencies
+        run: bundle install --jobs 4 --retry 3
       - name: Run Rubocop
         run: bundle exec rubocop -P
