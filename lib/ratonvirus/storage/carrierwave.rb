@@ -37,7 +37,10 @@ module Ratonvirus
 
       def asset_remove(asset)
         path = asset.file.path
+        delete_dir = asset.file.is_a?(::CarrierWave::SanitizedFile)
         asset.remove!
+
+        return unless delete_dir
 
         # Remove the temp cache dir if it exists
         dir = File.dirname(path)
