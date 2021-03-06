@@ -51,5 +51,6 @@ Gem::Specification.new do |spec|
 
   # Rubocop linter
   spec.add_development_dependency "rubocop", "~> 0.86.0"
+  spec.add_development_dependency "rubocop-ast", "~> 0.3.0" # Fix issue with Rubocop < 0.90.x
   spec.add_development_dependency "rubocop-rspec", "~> 1.40"
 end
