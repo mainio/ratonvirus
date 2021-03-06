@@ -3,7 +3,6 @@ on: [push, pull_request]
 
 env:
   CODECOV: "true"
-  RUBY_VERSION: 2.6.6
 
 jobs:
   test:
@@ -20,7 +19,6 @@ jobs:
           fetch-depth: 1
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
       - name: Install dependencies
         run: bundle install --jobs 4 --retry 3
