@@ -6,10 +6,6 @@ Changed:
 
 - The minimum Ruby version is now set to 2.7 as it is a requirement of Rails 7
 
-Fixed:
-
-- Some test regular expressions
-
 # v0.3.0
 
 Changed:
