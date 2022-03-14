@@ -43,6 +43,15 @@ describe Ratonvirus::Scanner::Eicar do
         expect(subject.errors).to contain_exactly(:antivirus_virus_detected)
       end
 
+      context "when the test file has a newline at the end of it" do
+        let(:path) { ratonvirus_file_fixture("infected_file_newline.pdf") }
+
+        it "results to antivirus_virus_detected error" do
+          expect(subject.virus?(path)).to be(true)
+          expect(subject.errors).to contain_exactly(:antivirus_virus_detected)
+        end
+      end
+
       context "when there is an exception" do
         before do
           allow(Digest::SHA256).to receive(:file).and_raise("Example")
