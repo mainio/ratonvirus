@@ -6,6 +6,12 @@ Changed:
 
 - The minimum Ruby version is now set to 2.7 as it is a requirement of Rails 7
 
+# v0.3.1
+
+Fixed:
+
+- Issue related to the EICAR test scanner. Related to [#16](https://github.com/mainio/ratonvirus/pull/16)
+
 # v0.3.0
 
 Changed:
