@@ -7,7 +7,7 @@ require "ratonvirus/version"
 Gem::Specification.new do |spec|
   spec.name = "ratonvirus"
   spec.version = Ratonvirus::VERSION
-  spec.required_ruby_version = ">= 2.5"
+  spec.required_ruby_version = ">= 2.7"
   spec.authors = ["Antti Hukkanen"]
   spec.email = ["antti.hukkanen@mainiotech.fi"]
 
@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
 
   # The activesupport dependency is used for the string manipulations done in
   # the Ratonvirus main module through ActiveSupport::Inflector.
-  spec.add_dependency "activesupport", "~> 6.0"
+  spec.add_dependency "activesupport", "~> 7.0"
 
   # Basic development dependencies.
   spec.add_development_dependency "rake", "~> 13.0"
@@ -43,8 +43,8 @@ Gem::Specification.new do |spec|
   # be attached to Active Models. These are not necessary for the basic
   # functionality of this gem and all other parts of the gem should work fine
   # without them. Therefore, only needed as development dependencies.
-  spec.add_development_dependency "activemodel", "~> 6.0"
-  spec.add_development_dependency "activestorage", "~> 6.0"
+  spec.add_development_dependency "activemodel", "~> 7.0"
+  spec.add_development_dependency "activestorage", "~> 7.0"
 
   # The following dependency is needed to test the CarrierWave storage. This is
   # not required for running this gem without CarrierWave.

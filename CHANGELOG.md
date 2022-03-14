@@ -1,3 +1,11 @@
+# v0.4.0
+
+Support for Rails 7
+
+Changed:
+
+- The minimum Ruby version is now set to 2.7 as it is a requirement of Rails 7
+
 # v0.3.0
 
 Changed:
