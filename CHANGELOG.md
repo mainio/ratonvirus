@@ -18,6 +18,12 @@ Changed:
 
 - The minimum Ruby version is now set to 2.7 as it is a requirement of Rails 7
 
+# v0.3.2
+
+Fixed:
+
+- Backport: Issue with ActiveStorage file integrity check due to IO position change after the virus check
+
 # v0.3.1
 
 Fixed:
