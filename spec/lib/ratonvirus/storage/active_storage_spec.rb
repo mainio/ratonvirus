@@ -230,10 +230,16 @@ describe Ratonvirus::Storage::ActiveStorage do
 
       context "with Hash" do
         let(:file_io) { File.open(ratonvirus_file_fixture("clean_file.pdf")) }
+        let!(:original_pos) { file_io.pos }
         let(:attachable) { { io: file_io } }
 
         it "yields with with the result of `path` of the attachable" do
           expect { |b| subject.asset_path(asset, &b) }.to yield_control
+        end
+
+        it "does not move the IO cursor position" do
+          expect { |b| subject.asset_path(asset, &b) }.to yield_control
+          expect(file_io.pos).to eq(original_pos)
         end
       end
 
