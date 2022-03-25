@@ -22,7 +22,7 @@ module Ratonvirus
 
           begin
             tempfile.binmode
-            IO.copy_stream(io, tempfile)
+            IO.copy_stream(io, tempfile, nil, 0)
             tempfile.flush
             tempfile.rewind
 
