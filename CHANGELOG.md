@@ -1,3 +1,9 @@
+# v0.3.2
+
+Fixed:
+
+- Backport: Issue with ActiveStorage file integrity check due to IO position change after the virus check
+
 # v0.3.1
 
 Fixed:
