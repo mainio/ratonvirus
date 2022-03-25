@@ -1,3 +1,9 @@
+# v0.4.2
+
+Fixed:
+
+- Issue with ActiveStorage file integrity check due to IO position change after the virus check
+
 # v0.4.1
 
 Fixed:
