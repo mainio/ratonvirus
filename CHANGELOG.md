@@ -2,7 +2,7 @@
 
 Fixed:
 
-- Issue related to the EICAR test scanner. Related to [#16](https://github.com/mainio/ratonvirus/pull/16)
+- Backport: Issue related to the EICAR test scanner. Related to [#16](https://github.com/mainio/ratonvirus/pull/16)
 
 # v0.3.0
 
