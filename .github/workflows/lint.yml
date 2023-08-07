@@ -1,5 +1,15 @@
 name: "[CI] Lint"
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - develop
+      - main
+      - release/*
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
   lint:
@@ -7,11 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: rokroskar/workflow-run-cleanup-action@v0.3.0
-        if: "github.ref != 'refs/heads/master'"
-        env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-      - uses: actions/checkout@v2.0.0
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 1
       - uses: ruby/setup-ruby@v1
