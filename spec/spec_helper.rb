@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "simplecov"
-
 require "ratonvirus"
 
 require_relative "helpers"
