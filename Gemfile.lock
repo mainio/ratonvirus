@@ -167,7 +167,7 @@ DEPENDENCIES
   rspec-rails (~> 4.0)
   rubocop (~> 1.11.0)
   rubocop-rspec (~> 2.2.0)
-  simplecov (~> 0.18.0)
+  simplecov
   simplecov-cobertura
   sqlite3 (~> 1.4)
 
