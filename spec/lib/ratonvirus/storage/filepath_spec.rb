@@ -155,12 +155,13 @@ describe Ratonvirus::Storage::Filepath do
 
       context "with asset responding true to .empty?" do
         before do
+          allow(asset).to receive(:respond_to?).with(:empty?).and_return(true)
+          expect(asset).to receive(:respond_to?).with(:empty?)
           allow(asset).to receive(:empty?).and_return(true)
-          expect(asset).to receive(:empty?)
         end
 
         it "does not call asset.respond_to?" do
-          expect(asset).not_to receive(:respond_to?)
+          expect(asset).not_to receive(:respond_to?).with(:path)
           expect { |b| subject.asset_path(asset, &b) }.not_to yield_control
         end
       end
@@ -182,16 +183,31 @@ describe Ratonvirus::Storage::Filepath do
         context "and asset responding to .path" do
           let(:path) { double }
 
-          it "yields with the response of asset.path" do
-            # Call to asset.path
+          before do
             allow(asset).to receive(:path).and_return(path)
             expect(asset).to receive(:path)
+          end
+
+          it "yields with the response of asset.path" do
+            # Call to asset.path
             allow(path).to receive(:empty?).and_return(false)
             expect(path).to receive(:empty?)
-
             expect { |b| subject.asset_path(asset, &b) }.to(
               yield_with_args(path)
             )
+          end
+
+          context "when path is empty" do
+            before do
+              allow(path).to receive(:empty?).and_return(true)
+              expect(path).to receive(:empty?)
+            end
+
+            it "does not yields the asset" do
+              expect { |b| subject.asset_path(asset, &b) }.not_to(
+                yield_with_args(asset)
+              )
+            end
           end
         end
       end
