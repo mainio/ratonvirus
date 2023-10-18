@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ratonvirus (0.4.2)
+    ratonvirus (0.4.3)
       activesupport (~> 7.0)
 
 GEM
@@ -155,6 +155,7 @@ GEM
     zeitwerk (2.6.11)
 
 PLATFORMS
+  ruby
   x86_64-linux
 
 DEPENDENCIES
