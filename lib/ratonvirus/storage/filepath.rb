@@ -24,7 +24,7 @@ module Ratonvirus
         return unless block_given?
 
         return unless asset
-        return if asset.empty?
+        return if asset.respond_to?(:empty?) && asset.empty?
 
         if asset.respond_to?(:path)
           # A file asset that responds to path (e.g. default `File`
@@ -33,7 +33,6 @@ module Ratonvirus
 
           return
         end
-
         # Plain file path string provided as resource
         yield asset
       end
