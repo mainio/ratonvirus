@@ -250,6 +250,26 @@ For installing ClamAV, refer to
 For further information about the configurations and how to create custom
 scanners, please refer to the [documentation](docs/index.md).
 
+## Common issues
+
+### NoMethodError (undefined method `attached?' ...)
+
+Multiple issues have been opened because of users getting the following error
+when trying to run a scan against a file path:
+
+```
+NoMethodError (undefined method `attached?' for "/path/to/file.pdf":String)
+```
+
+Most of the times this issue is because you have not configured the storage
+correctly. If you want to run direct scans against files, please use the
+`:filepath` storage option as described at
+[Manually checking for viruses](#manually-checking-for-viruses).
+
+If you need both: scans against file paths and scans against Active Storage
+attached files, please use the `:multi` storage option as described in the same
+section of the documentation.
+
 ## License
 
 MIT, see [LICENSE](LICENSE).
