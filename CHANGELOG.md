@@ -1,3 +1,17 @@
+# v0.4.4
+
+Support for Rails 8
+
+Changed:
+
+- The minimum Ruby version is now set to 3.2 as it is a requirement of Rails 8
+
+# v0.4.3
+
+Fixed:
+
+- Manual scan is not working for File objects #32
+
 # v0.4.2
 
 Fixed:

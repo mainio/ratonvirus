@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    ratonvirus (0.4.3)
-      activesupport (~> 7.0)
+    ratonvirus (0.4.4)
+      activesupport (>= 7.0)
 
 GEM
   remote: https://rubygems.org/
@@ -72,7 +72,11 @@ GEM
     method_source (1.0.0)
     mini_magick (4.12.0)
     mini_mime (1.1.5)
+    mini_portile2 (2.8.8)
     minitest (5.19.0)
+    nokogiri (1.15.3)
+      mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
     nokogiri (1.15.3-x86_64-linux)
       racc (~> 1.4)
     parallel (1.23.0)
@@ -146,6 +150,8 @@ GEM
     simplecov-cobertura (1.4.2)
       simplecov (~> 0.8)
     simplecov-html (0.12.3)
+    sqlite3 (1.6.3)
+      mini_portile2 (~> 2.8.0)
     sqlite3 (1.6.3-x86_64-linux)
     ssrf_filter (1.1.1)
     thor (1.2.2)
@@ -159,8 +165,8 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  activemodel (~> 7.0)
-  activestorage (~> 7.0)
+  activemodel (>= 7.0)
+  activestorage (>= 7.0)
   carrierwave (~> 2.1)
   rake (~> 13.0)
   ratonvirus!
