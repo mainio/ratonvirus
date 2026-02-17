@@ -95,7 +95,6 @@ module Ratonvirus
       def yield_processable_from(change, &_block)
         attachable = change.attachable
         return unless attachable
-        return if attachable.is_a?(::ActiveStorage::Blob)
 
         # If the attachable is a string, it is a reference to an already
         # existing blob. This can happen e.g. when the file blob is uploaded
