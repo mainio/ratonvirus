@@ -92,13 +92,15 @@ module Ratonvirus
         end
       end
 
-      def yield_processable_from(change, &_block)
+       def yield_processable_from(change, &_block)
         attachable = change.attachable
         return unless attachable
 
-        # If the attachable is a string, it is a reference to an already
-        # existing blob. This can happen e.g. when the file blob is uploaded
-        # dynamically before the form is submitted.
+        # The way the file was being attached meant it was attached as blob immediately, thus not being scanned.
+        # when checked, the file is persisted means new blobs get scanned and persistesd blobs (already scanned blobs)
+        # return at this point
+        return if attachable.is_a?(::ActiveStorage::Blob) && change.attachment.persisted?
+
         attachable = change.attachment.blob if attachable.is_a?(String)
 
         yield processable([change.attachment, attachable])
