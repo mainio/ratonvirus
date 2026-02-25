@@ -95,10 +95,6 @@ module Ratonvirus
        def yield_processable_from(change, &_block)
         attachable = change.attachable
         return unless attachable
-
-        # The way the file was being attached meant it was attached as blob immediately, thus not being scanned.
-        # when checked, the file is persisted means new blobs get scanned and persistesd blobs (already scanned blobs)
-        # return at this point
         return if attachable.is_a?(::ActiveStorage::Blob) && change.attachment.persisted?
 
         attachable = change.attachment.blob if attachable.is_a?(String)
