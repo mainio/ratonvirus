@@ -33,8 +33,8 @@ describe "Scanning behavior for single and multiple attachments" do
       expect(article).to be_valid
     end
 
-    # attaching an eicar file that would normally raise a validation error
-    # means that file isnt being scanned once already attached
+    # attaching an eicar file that would result in the expect to come back as invalid
+    # this means that file isnt being scanned when it is 'persisted'
     it "does not re-scan already scanned blob" do
       article = Article.new
       article.activestorage_file.attach(infected_file)
@@ -71,8 +71,8 @@ describe "Scanning behavior for single and multiple attachments" do
       expect(article).to be_valid
     end
 
-    # attaching an eicar file that would normally raise a validation error
-    # means that file isnt being scanned once already attached
+    # attaching an eicar file that would result in the expect to come back as invalid
+    # this means that file isnt being scanned when it is 'persisted'
     it "does not re-scan when no files change" do
       article = Article.create!
       article.activestorage_files.attach([infected_file, clean_file2])
@@ -88,8 +88,8 @@ describe "Scanning behavior for single and multiple attachments" do
       expect(article).to be_valid
     end
 
-    # attaching an eicar file that would normally raise a validation error
-    # means that file isnt being scanned once already attached
+    # attaching an eicar file that would result in the expect to come back as invalid
+    # this means that file isnt being scanned when it is 'persisted'
     it "scans only new files when added to existing files" do
       article = Article.create!
       article.activestorage_files.attach([infected_file, clean_file2])
