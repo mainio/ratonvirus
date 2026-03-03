@@ -1,3 +1,9 @@
+# v0.4.3
+
+Fixed:
+
+- Manual scan is not working for File objects [#32](https://github.com/mainio/ratonvirus/pull/32)
+
 # v0.4.2
 
 Fixed:
