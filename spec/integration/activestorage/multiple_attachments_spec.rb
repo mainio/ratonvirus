@@ -22,7 +22,7 @@ describe "ScanningBehaviour" do
       end
     end
 
-    context "when attaqching a single file" do
+    context "when attaching a single file" do
       it "scans new file" do
         scanner = Ratonvirus.scanner
         expect(scanner).to receive(:run_scan).once.and_call_original
@@ -38,6 +38,8 @@ describe "ScanningBehaviour" do
       it "does not re-scan already scanned blob" do
         article = Article.new
         article.activestorage_file.attach(infected_file)
+        # skipping validation so if the article is valid 
+        # it shows it hasnt been re-scanned
         article.save(validate: false)
 
         scanner = Ratonvirus.scanner
@@ -71,11 +73,11 @@ describe "ScanningBehaviour" do
         expect(article).to be_valid
       end
 
-      # attaching an eicar file that would result in the expect to come back as invalid
-      # this means that file isnt being scanned when it is 'persisted'
       it "does not re-scan when no files change" do
         article = Article.create!
         article.activestorage_files.attach([infected_file, clean_file2])
+        # skipping validation so if the article is valid 
+        # it shows it hasnt been re-scanned
         article.save(validate: false)
 
         scanner = Ratonvirus.scanner
@@ -88,11 +90,11 @@ describe "ScanningBehaviour" do
         expect(article).to be_valid
       end
 
-      # attaching an eicar file that would result in the expect to come back as invalid
-      # this means that file isnt being scanned when it is 'persisted'
       it "scans only new files when added to existing files" do
         article = Article.create!
         article.activestorage_files.attach([infected_file, clean_file2])
+        # skipping validation so if the article is valid 
+        # it shows it hasnt been re-scanned
         article.save(validate: false)
 
         scanner = Ratonvirus.scanner
