@@ -49,6 +49,27 @@ describe AntivirusValidator do
         end
       end
 
+      # When a remote file is opened through OpenURI (i.e. URI.open(...)), the
+      # data is returned as StringIO. This ensures that the StringIO position
+      # does not change during scanning as that would break the digest
+      # calculation.
+      #
+      # See: https://github.com/mainio/ratonvirus/issues/36
+      context "and the file is provided as StringIO" do
+        let(:clean_string_io) { StringIO.new("clean content") }
+        let(:attachment) { { io: clean_string_io, filename: "clean_file.txt" } }
+
+        it "does not change the checksum of the file" do
+          expect(article).to be_valid
+
+          expect(clean_string_io.pos).to eq(0)
+
+          # In case the IO position is changed during the scanning, the digest
+          # would differ from the one calculated by ActiveStorage.
+          expect(article.activestorage_file.blob.checksum).to eq(activestorage_digest(clean_string_io))
+        end
+      end
+
       context "and the file is provided as blob reference" do
         let(:attachment) { clean_file_blob.signed_id }
 

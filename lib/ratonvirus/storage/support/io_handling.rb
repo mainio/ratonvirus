@@ -23,8 +23,13 @@ module Ratonvirus
           begin
             tempfile.binmode
             if io.is_a?(StringIO)
+              orig_pos = io.pos
+              io.rewind
+
               # cannot specify src_offset for non-IO
               IO.copy_stream(io, tempfile)
+
+              io.pos = orig_pos
             else
               IO.copy_stream(io, tempfile, nil, 0)
             end
