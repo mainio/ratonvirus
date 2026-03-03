@@ -1,3 +1,14 @@
+# v0.5.0
+
+Changed:
+
+- Scanning is now skipped for blobs that have a related attachment that has been persisted in order to avoid scanning the same file multiple times. We assume that the file needs to be scanned only once during the first time it is being attached to a record because otherwise it would be re-scanned every time when the attached record is updated (in which case the file would not be changed, as if the file is changed, also the attached blob is changed).
+
+Fixed:
+
+- Skip antivirus scan for persisted blobs [#39](https://github.com/mainio/ratonvirus/pull/39)
+- XAmzContentSHA256Mismatch when using active storage with s3 backend [#36](https://github.com/mainio/ratonvirus/issues/36)
+
 # v0.4.3
 
 Fixed:
