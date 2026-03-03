@@ -38,7 +38,7 @@ describe "ScanningBehaviour" do
       it "does not re-scan already scanned blob" do
         article = Article.new
         article.activestorage_file.attach(infected_file)
-        # skipping validation so if the article is valid 
+        # skipping validation so if the article is valid
         # it shows it hasnt been re-scanned
         article.save(validate: false)
 
@@ -76,7 +76,7 @@ describe "ScanningBehaviour" do
       it "does not re-scan when no files change" do
         article = Article.create!
         article.activestorage_files.attach([infected_file, clean_file2])
-        # skipping validation so if the article is valid 
+        # skipping validation so if the article is valid
         # it shows it hasnt been re-scanned
         article.save(validate: false)
 
@@ -93,7 +93,7 @@ describe "ScanningBehaviour" do
       it "scans only new files when added to existing files" do
         article = Article.create!
         article.activestorage_files.attach([infected_file, clean_file2])
-        # skipping validation so if the article is valid 
+        # skipping validation so if the article is valid
         # it shows it hasnt been re-scanned
         article.save(validate: false)
 
