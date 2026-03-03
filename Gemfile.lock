@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ratonvirus (0.4.3)
+    ratonvirus (0.5.0)
       activesupport (~> 7.0)
 
 GEM
