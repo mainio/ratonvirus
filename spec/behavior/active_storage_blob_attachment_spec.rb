@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-describe "ScanningBehaviour" do
+describe "ActiveStorageBlobAttachment" do
   describe "Scanning behavior for single and multiple attachments" do
     let(:clean_file1) { Rack::Test::UploadedFile.new(ratonvirus_file_fixture("clean_file.pdf"), "application/pdf") }
     let(:clean_file2) { Rack::Test::UploadedFile.new(ratonvirus_file_fixture("clean_file.pdf"), "application/pdf") }
