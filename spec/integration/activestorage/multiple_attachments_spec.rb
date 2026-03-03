@@ -33,13 +33,16 @@ describe "ScanningBehaviour" do
         expect(article).to be_valid
       end
 
-      # attaching an eicar file that would result in the expect to come back as invalid
-      # this means that file isnt being scanned when it is 'persisted'
+      # Attaching an eicar file that would result in the expect to come back as
+      # invalid this means that file is not being scanned when it is
+      # 'persisted'.
       it "does not re-scan already scanned blob" do
         article = Article.new
         article.activestorage_file.attach(infected_file)
-        # skipping validation so if the article is valid
-        # it shows it hasnt been re-scanned
+        # The first validation is skipped because we want to ensure that the
+        # scanning is skipped for files attached earlier. This is expected
+        # behavior as we do not want to re-scan the file on each form submission
+        # when we already scanned the file earlier.
         article.save(validate: false)
 
         scanner = Ratonvirus.scanner
@@ -76,8 +79,10 @@ describe "ScanningBehaviour" do
       it "does not re-scan when no files change" do
         article = Article.create!
         article.activestorage_files.attach([infected_file, clean_file2])
-        # skipping validation so if the article is valid
-        # it shows it hasnt been re-scanned
+        # The first validation is skipped because we want to ensure that the
+        # scanning is skipped for files attached earlier. This is expected
+        # behavior as we do not want to re-scan the file on each form submission
+        # when we already scanned the file earlier.
         article.save(validate: false)
 
         scanner = Ratonvirus.scanner
@@ -93,8 +98,10 @@ describe "ScanningBehaviour" do
       it "scans only new files when added to existing files" do
         article = Article.create!
         article.activestorage_files.attach([infected_file, clean_file2])
-        # skipping validation so if the article is valid
-        # it shows it hasnt been re-scanned
+        # The first validation is skipped because we want to ensure that the
+        # scanning is skipped for files attached earlier. This is expected
+        # behavior as we do not want to re-scan the file on each form submission
+        # when we already scanned the file earlier.
         article.save(validate: false)
 
         scanner = Ratonvirus.scanner
