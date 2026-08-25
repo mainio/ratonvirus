@@ -4,5 +4,8 @@
 # load paths.
 module Ratonvirus
   class Engine < ::Rails::Engine
+    ::ActiveStorage::Attached::Many.prepend(
+      Ratonvirus::Storage::ActiveStorageAttachExtension
+    )
   end
 end
