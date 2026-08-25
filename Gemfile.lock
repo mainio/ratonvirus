@@ -93,7 +93,7 @@ GEM
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     marcel (1.2.1)
-    mimemagic (0.4.3)
+    mimemagic (0.3.9)
       nokogiri (~> 1)
       rake
     mini_magick (5.3.3)
@@ -169,14 +169,14 @@ GEM
     rspec-mocks (3.13.8)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
-    rspec-rails (4.1.2)
-      actionpack (>= 4.2)
-      activesupport (>= 4.2)
-      railties (>= 4.2)
-      rspec-core (~> 3.10)
-      rspec-expectations (~> 3.10)
-      rspec-mocks (~> 3.10)
-      rspec-support (~> 3.10)
+    rspec-rails (6.1.5)
+      actionpack (>= 6.1)
+      activesupport (>= 6.1)
+      railties (>= 6.1)
+      rspec-core (~> 3.13)
+      rspec-expectations (~> 3.13)
+      rspec-mocks (~> 3.13)
+      rspec-support (~> 3.13)
     rspec-support (3.13.7)
     rubocop (1.11.0)
       parallel (~> 1.10)
@@ -202,7 +202,7 @@ GEM
     simplecov-cobertura (4.0.0)
       rexml
       simplecov (~> 1.0)
-    sqlite3 (1.7.3)
+    sqlite3 (2.1.1)
       mini_portile2 (~> 2.8.0)
     ssrf_filter (1.5.0)
     thor (1.5.0)
@@ -223,15 +223,16 @@ DEPENDENCIES
   activemodel (~> 8.0)
   activestorage (~> 8.0)
   carrierwave (~> 2.1)
+  mimemagic (< 0.3.10)
   rake (~> 13.0)
   ratonvirus!
   rspec (~> 3.0)
-  rspec-rails (~> 4.0)
+  rspec-rails (~> 6.0)
   rubocop (~> 1.11.0)
   rubocop-rspec (~> 2.2.0)
   simplecov
   simplecov-cobertura
-  sqlite3 (~> 1.4)
+  sqlite3 (~> 2.1.0)
 
 BUNDLED WITH
    2.6.9
