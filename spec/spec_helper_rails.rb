@@ -9,5 +9,5 @@ require_relative "../app/validators/antivirus_validator"
 require "spec_helper"
 
 # Add the translations load path for I18n
-base_path = File.expand_path(File.dirname(File.dirname(__FILE__)))
+base_path = File.expand_path(File.dirname(__FILE__, 2))
 I18n.load_path << Dir["#{base_path}/config/locales/*.yml"]

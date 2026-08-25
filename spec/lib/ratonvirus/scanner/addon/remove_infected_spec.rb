@@ -3,7 +3,7 @@
 require "spec_helper"
 
 describe Ratonvirus::Scanner::Addon::RemoveInfected do
-  let(:subject) { double }
+  subject { double }
 
   describe ".extended" do
     it "is called when addon is applied" do

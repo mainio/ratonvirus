@@ -7,7 +7,7 @@ require "ratonvirus/version"
 Gem::Specification.new do |spec|
   spec.name = "ratonvirus"
   spec.version = Ratonvirus::VERSION
-  spec.required_ruby_version = ">= 2.7"
+  spec.required_ruby_version = ">= 3.2"
   spec.authors = ["Antti Hukkanen"]
   spec.email = ["antti.hukkanen@mainiotech.fi"]
 
@@ -15,6 +15,7 @@ Gem::Specification.new do |spec|
   spec.description = "Adds antivirus check capability for Rails applications."
   spec.homepage = "https://github.com/mainio/ratonvirus"
   spec.license = "MIT"
+  spec.metadata["rubygems_mfa_required"] = "true"
 
   spec.files = Dir[
     "{app,config,lib}/**/*",
@@ -28,29 +29,4 @@ Gem::Specification.new do |spec|
   # The activesupport dependency is used for the string manipulations done in
   # the Ratonvirus main module through ActiveSupport::Inflector.
   spec.add_dependency "activesupport", "~> 8.0"
-
-  # Basic development dependencies.
-  spec.add_development_dependency "rake", "~> 13.0"
-  spec.add_development_dependency "rspec", "~> 3.0"
-
-  # Rails integration tests
-  spec.add_development_dependency "rspec-rails", "~> 6.0"
-
-  # Code coverage
-  spec.add_development_dependency "simplecov", "~> 0.18.0"
-
-  # The following Rails dependencies are needed to test the actual validator to
-  # be attached to Active Models. These are not necessary for the basic
-  # functionality of this gem and all other parts of the gem should work fine
-  # without them. Therefore, only needed as development dependencies.
-  spec.add_development_dependency "activemodel", "~> 8.0"
-  spec.add_development_dependency "activestorage", "~> 8.0"
-
-  # The following dependency is needed to test the CarrierWave storage. This is
-  # not required for running this gem without CarrierWave.
-  spec.add_development_dependency "carrierwave", "~> 2.1"
-
-  # Rubocop linter
-  spec.add_development_dependency "rubocop", "~> 1.11.0"
-  spec.add_development_dependency "rubocop-rspec", "~> 2.2.0"
 end

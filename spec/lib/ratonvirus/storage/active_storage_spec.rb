@@ -12,8 +12,7 @@ describe Ratonvirus::Storage::ActiveStorage do
 
     before do
       allow(record).to receive(:file).and_return(file)
-      allow(file).to receive(:record).and_return(file_record)
-      allow(file).to receive(:name).and_return("file")
+      allow(file).to receive_messages(record: file_record, name: "file")
       allow(file_record).to receive(:attachment_changes).and_return(changes)
     end
 
@@ -60,9 +59,7 @@ describe Ratonvirus::Storage::ActiveStorage do
     let(:single_change) { double }
 
     before do
-      allow(resource).to receive(:attached?).and_return(true)
-      allow(resource).to receive(:record).and_return(file_record)
-      allow(resource).to receive(:name).and_return("file")
+      allow(resource).to receive_messages(attached?: true, record: file_record, name: "file")
       allow(file_record).to receive(:attachment_changes).and_return(changes)
     end
 
@@ -96,8 +93,7 @@ describe Ratonvirus::Storage::ActiveStorage do
           let(:change_attachment) { double("attachment") }
 
           before do
-            allow(single_change).to receive(:attachable).and_return(change_attachable)
-            allow(single_change).to receive(:attachment).and_return(change_attachment)
+            allow(single_change).to receive_messages(attachable: change_attachable, attachment: change_attachment)
             allow(change_attachment).to receive(:persisted?).and_return(false)
             expect(single_change).to receive(:attachable)
             expect(single_change).to receive(:attachment)
@@ -119,12 +115,12 @@ describe Ratonvirus::Storage::ActiveStorage do
       end
 
       context "with ActiveStorage::Attached::Many" do
-        let(:change1) { double }
-        let(:change_attachable1) { double }
-        let(:change_attachment1) { double }
-        let(:change2) { double }
-        let(:change_attachable2) { double }
-        let(:change_attachment2) { double }
+        let(:change_one) { double }
+        let(:change_attachable_one) { double }
+        let(:change_attachment_one) { double }
+        let(:change_two) { double }
+        let(:change_attachable_two) { double }
+        let(:change_attachment_two) { double }
 
         before do
           allow(ActiveStorage::Attached::Changes::CreateOne).to receive(:===)
@@ -136,22 +132,20 @@ describe Ratonvirus::Storage::ActiveStorage do
           expect(ActiveStorage::Attached::Changes::CreateMany).to receive(:===)
             .with(single_change)
 
-          allow(single_change).to receive(:subchanges).and_return([change1, change2])
+          allow(single_change).to receive(:subchanges).and_return([change_one, change_two])
           expect(single_change).to receive(:subchanges)
-          allow(change1).to receive(:attachable).and_return(change_attachable1)
-          expect(change1).to receive(:attachable)
-          allow(change_attachable1).to receive(:is_a?).with(String).and_return(false)
-          expect(change_attachable1).to receive(:is_a?).once
-          allow(change1).to receive(:attachment).and_return(change_attachment1)
-          allow(change_attachment1).to receive(:persisted?).and_return(false)
-          allow(change2).to receive(:attachable).and_return(change_attachable2)
-          expect(change1).to receive(:attachment)
-          expect(change2).to receive(:attachable)
-          allow(change_attachable2).to receive(:is_a?).with(String).and_return(false)
-          expect(change_attachable2).to receive(:is_a?).once
-          allow(change2).to receive(:attachment).and_return(change_attachment2)
-          allow(change_attachment2).to receive(:persisted?).and_return(false)
-          expect(change2).to receive(:attachment)
+          expect(change_one).to receive(:attachable)
+          allow(change_attachable_one).to receive(:is_a?).with(String).and_return(false)
+          expect(change_attachable_one).to receive(:is_a?).once
+          allow(change_one).to receive_messages(attachable: change_attachable_one, attachment: change_attachment_one)
+          allow(change_attachment_one).to receive(:persisted?).and_return(false)
+          expect(change_one).to receive(:attachment)
+          expect(change_two).to receive(:attachable)
+          allow(change_attachable_two).to receive(:is_a?).with(String).and_return(false)
+          expect(change_attachable_two).to receive(:is_a?).once
+          allow(change_two).to receive_messages(attachable: change_attachable_two, attachment: change_attachment_two)
+          allow(change_attachment_two).to receive(:persisted?).and_return(false)
+          expect(change_two).to receive(:attachment)
         end
 
         it "calls processable and yields the result" do
@@ -168,13 +162,13 @@ describe Ratonvirus::Storage::ActiveStorage do
             when 1
               asset = processable.instance_variable_get(:@asset)
               expect(asset).to be_a(Array)
-              expect(asset[0]).to eq(change_attachment1)
-              expect(asset[1]).to eq(change_attachable1)
+              expect(asset[0]).to eq(change_attachment_one)
+              expect(asset[1]).to eq(change_attachable_one)
             when 2
               asset = processable.instance_variable_get(:@asset)
               expect(asset).to be_a(Array)
-              expect(asset[0]).to eq(change_attachment2)
-              expect(asset[1]).to eq(change_attachable2)
+              expect(asset[0]).to eq(change_attachment_two)
+              expect(asset[1]).to eq(change_attachable_two)
             end
 
             index += 1

@@ -3,8 +3,9 @@
 require "spec_helper"
 
 describe Ratonvirus::Scanner::Base do
+  subject { described_class.new(config) }
+
   let(:config) { {} }
-  let(:subject) { described_class.new(config) }
 
   it "has callbacks defined" do
     expect(subject).to respond_to(:before_process_scan)
@@ -72,7 +73,7 @@ describe Ratonvirus::Scanner::Base do
 
       it "accepts configuration" do
         expect(subject.config).to include(config)
-        expect(subject.config.keys).to contain_exactly(*config.keys)
+        expect(subject.config.keys).to match_array(config.keys)
       end
     end
   end
@@ -83,13 +84,13 @@ describe Ratonvirus::Scanner::Base do
 
     it "has default configuration" do
       expect(subject.config).to include(defaults)
-      expect(subject.config.keys).to contain_exactly(*defaults.keys)
+      expect(subject.config.keys).to match_array(defaults.keys)
     end
 
     it "has expected default configuration" do
       expect(defaults).to be_a(Hash)
       expect(defaults).to include(expected)
-      expect(defaults.keys).to contain_exactly(*expected.keys)
+      expect(defaults.keys).to match_array(expected.keys)
     end
   end
 
@@ -110,6 +111,8 @@ describe Ratonvirus::Scanner::Base do
       end
 
       context "when errors are added by run_scan" do
+        subject { scanner.new }
+
         let(:scanner) do
           Class.new described_class do
             protected
@@ -120,8 +123,6 @@ describe Ratonvirus::Scanner::Base do
             end
           end
         end
-
-        let(:subject) { scanner.new }
 
         it "contains correct errors" do
           subject.virus?("test")

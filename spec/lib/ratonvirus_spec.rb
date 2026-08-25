@@ -3,7 +3,7 @@
 require "spec_helper"
 
 describe Ratonvirus do
-  # rubocop:disable RSpec/BeforeAfterAll
+  # rubocop:disable-next RSpec/BeforeAfterAll
   before(:all) do
     # Define test addon
     test_addon = Module.new
@@ -20,7 +20,6 @@ describe Ratonvirus do
     # Make the scanner available as `Ratonvirus::Storage::Test`
     described_class::Storage.const_set(:Test, test_storage)
   end
-  # rubocop:enable RSpec/BeforeAfterAll
 
   before do
     # Make sure the default configs are applied to all tests in this spec since

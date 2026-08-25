@@ -47,13 +47,13 @@ module Ratonvirus
       module Callbacks
         private
 
-        def run_callbacks(type, *args, &_block)
+        def run_callbacks(type, *, &)
           raise NotDefinedError, "No callbacks defined" if @_callbacks.nil?
           raise NotDefinedError, "Callbacks for #{type} not defined" if @_callbacks[type].nil?
 
-          run_callback_callables @_callbacks[type][:before], *args
-          result = yield(*args)
-          run_callback_callables @_callbacks[type][:after], *args
+          run_callback_callables(@_callbacks[type][:before], *)
+          result = yield(*)
+          run_callback_callables(@_callbacks[type][:after], *)
 
           result
         end

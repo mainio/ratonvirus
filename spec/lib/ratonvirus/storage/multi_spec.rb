@@ -193,48 +193,48 @@ describe Ratonvirus::Storage::Multi do
       end
 
       context "with multiple items" do
-        let(:storage1) { double }
-        let(:storage2) { double }
-        let(:storage3) { double }
-        let(:storages) { [storage1, storage2, storage3] }
+        let(:storage_one) { double }
+        let(:storage_two) { double }
+        let(:storage_three) { double }
+        let(:storages) { [storage_one, storage_two, storage_three] }
 
         it "yields only on the first storage if it accepts the resource" do
-          allow(storage1).to receive(:accept?).with(resource).and_return(true)
-          expect(storage1).to receive(:accept?).with(resource)
-          expect(storage2).not_to receive(:accept?)
-          expect(storage3).not_to receive(:accept?)
+          allow(storage_one).to receive(:accept?).with(resource).and_return(true)
+          expect(storage_one).to receive(:accept?).with(resource)
+          expect(storage_two).not_to receive(:accept?)
+          expect(storage_three).not_to receive(:accept?)
 
-          expect { |b| method.call(resource, &b) }.to yield_with_args(storage1)
+          expect { |b| method.call(resource, &b) }.to yield_with_args(storage_one)
         end
 
         it "yields on the first and second storage if second one accepts the resource" do
-          allow(storage1).to receive(:accept?).with(resource).and_return(false)
-          expect(storage1).to receive(:accept?).with(resource)
-          allow(storage2).to receive(:accept?).with(resource).and_return(true)
-          expect(storage2).to receive(:accept?).with(resource)
-          expect(storage3).not_to receive(:accept?)
+          allow(storage_one).to receive(:accept?).with(resource).and_return(false)
+          expect(storage_one).to receive(:accept?).with(resource)
+          allow(storage_two).to receive(:accept?).with(resource).and_return(true)
+          expect(storage_two).to receive(:accept?).with(resource)
+          expect(storage_three).not_to receive(:accept?)
 
-          expect { |b| method.call(resource, &b) }.to yield_with_args(storage2)
+          expect { |b| method.call(resource, &b) }.to yield_with_args(storage_two)
         end
 
         it "yields on all the storages if the last one accepts the resource" do
-          allow(storage1).to receive(:accept?).with(resource).and_return(false)
-          expect(storage1).to receive(:accept?).with(resource)
-          allow(storage2).to receive(:accept?).with(resource).and_return(false)
-          expect(storage2).to receive(:accept?).with(resource)
-          allow(storage3).to receive(:accept?).with(resource).and_return(true)
-          expect(storage3).to receive(:accept?).with(resource)
+          allow(storage_one).to receive(:accept?).with(resource).and_return(false)
+          expect(storage_one).to receive(:accept?).with(resource)
+          allow(storage_two).to receive(:accept?).with(resource).and_return(false)
+          expect(storage_two).to receive(:accept?).with(resource)
+          allow(storage_three).to receive(:accept?).with(resource).and_return(true)
+          expect(storage_three).to receive(:accept?).with(resource)
 
-          expect { |b| method.call(resource, &b) }.to yield_with_args(storage3)
+          expect { |b| method.call(resource, &b) }.to yield_with_args(storage_three)
         end
 
         it "does not yield if all the storages reject the resource" do
-          allow(storage1).to receive(:accept?).with(resource).and_return(false)
-          expect(storage1).to receive(:accept?).with(resource)
-          allow(storage2).to receive(:accept?).with(resource).and_return(false)
-          expect(storage2).to receive(:accept?).with(resource)
-          allow(storage3).to receive(:accept?).with(resource).and_return(false)
-          expect(storage3).to receive(:accept?).with(resource)
+          allow(storage_one).to receive(:accept?).with(resource).and_return(false)
+          expect(storage_one).to receive(:accept?).with(resource)
+          allow(storage_two).to receive(:accept?).with(resource).and_return(false)
+          expect(storage_two).to receive(:accept?).with(resource)
+          allow(storage_three).to receive(:accept?).with(resource).and_return(false)
+          expect(storage_three).to receive(:accept?).with(resource)
 
           expect { |b| method.call(resource, &b) }.not_to yield_control
         end

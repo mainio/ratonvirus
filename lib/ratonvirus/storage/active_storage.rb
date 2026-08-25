@@ -9,7 +9,7 @@ module Ratonvirus
 
       class << self
         def register_attachables(record, name, attachables)
-          registry = (record.instance_variable_get(ATTACHABLES) || {})
+          registry = record.instance_variable_get(ATTACHABLES) || {}
           (registry[name.to_s] ||= []).concat(attachables)
           record.instance_variable_set(ATTACHABLES, registry)
         end
@@ -33,7 +33,7 @@ module Ratonvirus
           resource.is_a?(::ActiveStorage::Attached::Many)
       end
 
-      def process(resource, &block)
+      def process(resource, &)
         return unless block_given?
         return if resource.nil?
         return unless resource.attached?
@@ -44,13 +44,13 @@ module Ratonvirus
 
         case change
         when ::ActiveStorage::Attached::Changes::CreateOne
-          handle_create_one(change, record, name, &block)
+          handle_create_one(change, record, name, &)
         when ::ActiveStorage::Attached::Changes::CreateMany
-          handle_create_many(change, record, name, &block)
+          handle_create_many(change, record, name, &)
         end
       end
 
-      def asset_path(asset, &block)
+      def asset_path(asset, &)
         return unless block_given?
         return unless asset.is_a?(Array)
 
@@ -60,10 +60,10 @@ module Ratonvirus
           # These files should be already locally stored but their permissions
           # can prevent the virus scanner executable from accessing them.
           # Therefore, a temporary file is created for them as well.
-          io_path(asset[1], ext, &block)
+          io_path(asset[1], ext, &)
         when Hash
           io = asset[1].fetch(:io)
-          io_path(io, ext, &block) if io
+          io_path(io, ext, &) if io
         when ::ActiveStorage::Blob
           asset[1].open do |tempfile|
             prepare_for_scanner tempfile.path
@@ -102,9 +102,9 @@ module Ratonvirus
 
       private
 
-      def handle_create_one(change, record, name, &block)
+      def handle_create_one(change, record, name, &)
         raw = self.class.registered_attachables_for(record, name)&.last
-        yield_processable_from(change, raw, &block)
+        yield_processable_from(change, raw, &)
       end
 
       def handle_create_many(change, record, name, &block)
@@ -114,7 +114,7 @@ module Ratonvirus
         end
       end
 
-      def yield_processable_from(change, raw_attachable = nil, &_block)
+      def yield_processable_from(change, raw_attachable = nil, &)
         attachable = raw_attachable || change.attachable
         return unless attachable
 
