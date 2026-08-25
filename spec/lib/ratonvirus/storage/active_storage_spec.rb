@@ -98,6 +98,7 @@ describe Ratonvirus::Storage::ActiveStorage do
           before do
             allow(single_change).to receive(:attachable).and_return(change_attachable)
             allow(single_change).to receive(:attachment).and_return(change_attachment)
+            allow(change_attachment).to receive(:persisted?).and_return(false)
             expect(single_change).to receive(:attachable)
             expect(single_change).to receive(:attachment)
           end
@@ -139,17 +140,17 @@ describe Ratonvirus::Storage::ActiveStorage do
           expect(single_change).to receive(:subchanges)
           allow(change1).to receive(:attachable).and_return(change_attachable1)
           expect(change1).to receive(:attachable)
-          allow(change_attachable1).to receive(:is_a?).with(ActiveStorage::Blob).and_return(false)
           allow(change_attachable1).to receive(:is_a?).with(String).and_return(false)
-          expect(change_attachable1).to receive(:is_a?).twice
+          expect(change_attachable1).to receive(:is_a?).once
           allow(change1).to receive(:attachment).and_return(change_attachment1)
+          allow(change_attachment1).to receive(:persisted?).and_return(false)
           allow(change2).to receive(:attachable).and_return(change_attachable2)
           expect(change1).to receive(:attachment)
           expect(change2).to receive(:attachable)
-          allow(change_attachable2).to receive(:is_a?).with(ActiveStorage::Blob).and_return(false)
           allow(change_attachable2).to receive(:is_a?).with(String).and_return(false)
-          expect(change_attachable2).to receive(:is_a?).twice
+          expect(change_attachable2).to receive(:is_a?).once
           allow(change2).to receive(:attachment).and_return(change_attachment2)
+          allow(change_attachment2).to receive(:persisted?).and_return(false)
           expect(change2).to receive(:attachment)
         end
 

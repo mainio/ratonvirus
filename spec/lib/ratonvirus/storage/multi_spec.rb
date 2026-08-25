@@ -69,11 +69,11 @@ describe Ratonvirus::Storage::Multi do
         expect(Ratonvirus).to receive(:backend_class)
           .with("Storage", :active_storage).ordered.and_call_original
         expect(Ratonvirus::Storage::ActiveStorage).to receive(:new)
-          .with(conf: "option").ordered
+          .with({ conf: "option" }).ordered
         expect(Ratonvirus).to receive(:backend_class)
           .with("Storage", :filepath).ordered.and_call_original
         expect(Ratonvirus::Storage::Filepath).to receive(:new)
-          .with(conf2: "option2").ordered
+          .with({ conf2: "option2" }).ordered
 
         subject.setup
 

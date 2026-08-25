@@ -222,6 +222,7 @@ describe AntivirusValidator do
         5.times do
           a.activestorage_files.attach(infected_attachment)
         end
+
         a
       end
 
