@@ -5,24 +5,6 @@ module Ratonvirus
     class ActiveStorage < Base
       include Ratonvirus::Storage::Support::IoHandling
 
-      ATTACHABLES = :@__ratonvirus_pending_attachables
-
-      class << self
-        def register_attachables(record, name, attachables)
-          registry = record.instance_variable_get(ATTACHABLES) || {}
-          (registry[name.to_s] ||= []).concat(attachables)
-          record.instance_variable_set(ATTACHABLES, registry)
-        end
-
-        def registered_attachables_for(record, name)
-          record.instance_variable_get(ATTACHABLES)&.[](name.to_s)
-        end
-
-        def clear_registered_attachables(record, name)
-          record.instance_variable_get(ATTACHABLES)&.delete(name.to_s)
-        end
-      end
-
       def changed?(record, attribute)
         resource = record.public_send attribute
         !resource.record.attachment_changes[resource.name].nil?
@@ -38,15 +20,13 @@ module Ratonvirus
         return if resource.nil?
         return unless resource.attached?
 
-        record = resource.record
-        name = resource.name
-        change = record.attachment_changes[name]
+        change = resource.record.attachment_changes[resource.name]
 
         case change
         when ::ActiveStorage::Attached::Changes::CreateOne
-          handle_create_one(change, record, name, &)
+          handle_create_one(change, &)
         when ::ActiveStorage::Attached::Changes::CreateMany
-          handle_create_many(change, record, name, &)
+          handle_create_many(change, &)
         end
       end
 
@@ -102,31 +82,27 @@ module Ratonvirus
 
       private
 
-      def handle_create_one(change, record, name, &)
-        raw = self.class.registered_attachables_for(record, name)&.last
-        yield_processable_from(change, raw, &)
+      def handle_create_one(change, &)
+        yield_processable_from(change, &)
       end
 
-      def handle_create_many(change, record, name, &block)
-        raw_list = self.class.registered_attachables_for(record, name)
-        change.send(:subchanges).each_with_index do |subchange, index|
-          yield_processable_from(subchange, raw_list && raw_list[index], &block)
+      def handle_create_many(change, &block)
+        change.pending_uploads.each do |subchange|
+          yield_processable_from(subchange, &block)
         end
       end
 
-      def yield_processable_from(change, raw_attachable = nil, &)
-        attachable = raw_attachable || change.attachable
+      def yield_processable_from(change, &)
+        attachable = change.attachable
         return unless attachable
-
-        attachment = change.attachment
-        return if attachment.persisted?
+        return if attachable.is_a?(::ActiveStorage::Blob) && change.attachment.persisted?
 
         # If the attachable is a string, it is a reference to an already
         # existing blob. This can happen e.g. when the file blob is uploaded
         # dynamically before the form is submitted.
-        attachable = attachment.blob if attachable.is_a?(String)
+        attachable = change.attachment.blob if attachable.is_a?(String)
 
-        yield processable([attachment, attachable])
+        yield processable([change.attachment, attachable])
       end
     end
   end

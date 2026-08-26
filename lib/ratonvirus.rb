@@ -18,7 +18,6 @@ require_relative "ratonvirus/storage/filepath"
 require_relative "ratonvirus/storage/active_storage"
 require_relative "ratonvirus/storage/carrierwave"
 require_relative "ratonvirus/storage/multi"
-require_relative "ratonvirus/storage/active_storage_attach_extension"
 
 require_relative "ratonvirus/engine" if defined?(Rails)
 
