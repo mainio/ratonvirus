@@ -1,4 +1,4 @@
-require: rubocop-rspec
+plugins: rubocop-rspec
 
 # Common configuration.
 AllCops:
@@ -251,7 +251,7 @@ Style/BlockDelimiters:
     - let!
     - subject
     - watch
-  IgnoredMethods:
+  AllowedMethods:
     # Methods that can be either procedural or functional and cannot be
     # categorised from their usage alone, e.g.
     #
@@ -800,7 +800,7 @@ Style/PercentQLiterals:
     - lower_case_q # Use %q when possible, %Q when necessary
     - upper_case_q # Always use %Q
 
-Naming/PredicateName:
+Naming/PredicatePrefix:
   # Predicate name prefixes.
   NamePrefix:
     - is_
@@ -982,7 +982,7 @@ Style/SymbolArray:
 Style/SymbolProc:
   # A list of method names to be ignored by the check.
   # The names should be fairly unique, otherwise you'll end up ignoring lots of code.
-  IgnoredMethods:
+  AllowedMethods:
     - respond_to
     - define_method
 
