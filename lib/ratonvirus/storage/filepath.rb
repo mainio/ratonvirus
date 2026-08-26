@@ -20,7 +20,7 @@ module Ratonvirus
         end
       end
 
-      def asset_path(asset, &block)
+      def asset_path(asset, &)
         return unless block_given?
 
         return unless asset
@@ -29,7 +29,7 @@ module Ratonvirus
         if asset.respond_to?(:path)
           # A file asset that responds to path (e.g. default `File`
           # object).
-          asset_path(asset.path, &block)
+          asset_path(asset.path, &)
 
           return
         end

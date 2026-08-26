@@ -15,7 +15,7 @@ module Ratonvirus
           resource.is_a?(::ActiveStorage::Attached::Many)
       end
 
-      def process(resource, &block)
+      def process(resource, &)
         return unless block_given?
         return if resource.nil?
         return unless resource.attached?
@@ -24,13 +24,13 @@ module Ratonvirus
 
         case change
         when ::ActiveStorage::Attached::Changes::CreateOne
-          handle_create_one(change, &block)
+          handle_create_one(change, &)
         when ::ActiveStorage::Attached::Changes::CreateMany
-          handle_create_many(change, &block)
+          handle_create_many(change, &)
         end
       end
 
-      def asset_path(asset, &block)
+      def asset_path(asset, &)
         return unless block_given?
         return unless asset.is_a?(Array)
 
@@ -40,10 +40,10 @@ module Ratonvirus
           # These files should be already locally stored but their permissions
           # can prevent the virus scanner executable from accessing them.
           # Therefore, a temporary file is created for them as well.
-          io_path(asset[1], ext, &block)
+          io_path(asset[1], ext, &)
         when Hash
           io = asset[1].fetch(:io)
-          io_path(io, ext, &block) if io
+          io_path(io, ext, &) if io
         when ::ActiveStorage::Blob
           asset[1].open do |tempfile|
             prepare_for_scanner tempfile.path
@@ -82,17 +82,17 @@ module Ratonvirus
 
       private
 
-      def handle_create_one(change, &block)
-        yield_processable_from(change, &block)
+      def handle_create_one(change, &)
+        yield_processable_from(change, &)
       end
 
       def handle_create_many(change, &block)
-        change.send(:subchanges).each do |subchange|
+        change.pending_uploads.each do |subchange|
           yield_processable_from(subchange, &block)
         end
       end
 
-      def yield_processable_from(change, &_block)
+      def yield_processable_from(change, &)
         attachable = change.attachable
         return unless attachable
         return if attachable.is_a?(::ActiveStorage::Blob) && change.attachment.persisted?

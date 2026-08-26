@@ -3,7 +3,8 @@
 require "spec_helper"
 
 describe Ratonvirus::Processable do
-  let(:subject) { described_class.new(storage, asset) }
+  subject { described_class.new(storage, asset) }
+
   let(:storage) { double }
   let(:asset) { double }
 

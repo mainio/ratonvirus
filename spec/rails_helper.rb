@@ -36,7 +36,7 @@ load "#{Rails.root}/db/schema.rb"
 begin
   ActiveRecord::Migration.maintain_test_schema!
 rescue ActiveRecord::PendingMigrationError => e
-  puts e.to_s.strip
+  puts e.to_s.strip # rubocop:disable RSpec/Output
   exit 1
 end
 
@@ -47,7 +47,7 @@ require "rspec/rails"
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = File.expand_path("fixtures", File.dirname(__FILE__))
+  config.fixture_paths = [File.expand_path("fixtures", File.dirname(__FILE__))]
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false

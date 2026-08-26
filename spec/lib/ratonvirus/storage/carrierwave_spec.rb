@@ -125,13 +125,13 @@ describe Ratonvirus::Storage::Carrierwave do
       allow(file).to receive(:path).and_return(path)
       expect(file).to receive(:path)
       expect(asset).to receive(:remove!)
-      expect(file).to receive(:is_a?).with(::CarrierWave::SanitizedFile)
+      expect(file).to receive(:is_a?).with(CarrierWave::SanitizedFile)
     end
 
     context "when the asset is a CarrierWave::SanitizedFile" do
       before do
         allow(file).to receive(:is_a?)
-          .with(::CarrierWave::SanitizedFile).and_return(true)
+          .with(CarrierWave::SanitizedFile).and_return(true)
         allow(File).to receive(:dirname).with(path).and_return(dir)
         expect(File).to receive(:dirname).with(path)
       end

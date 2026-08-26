@@ -3,7 +3,7 @@
 require "spec_helper"
 
 describe Ratonvirus::Scanner::Support::Callbacks do
-  let(:subject) { double }
+  subject { double }
 
   before do
     subject.extend(described_class)

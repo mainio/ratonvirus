@@ -4,9 +4,9 @@ require "rails_helper"
 
 describe "ActiveStorageBlobAttachment" do
   describe "Scanning behavior for single and multiple attachments" do
-    let(:clean_file1) { Rack::Test::UploadedFile.new(ratonvirus_file_fixture("clean_file.pdf"), "application/pdf") }
-    let(:clean_file2) { Rack::Test::UploadedFile.new(ratonvirus_file_fixture("clean_file.pdf"), "application/pdf") }
-    let(:clean_file3) { Rack::Test::UploadedFile.new(ratonvirus_file_fixture("clean_file.pdf"), "application/pdf") }
+    let(:clean_file_one) { Rack::Test::UploadedFile.new(ratonvirus_file_fixture("clean_file.pdf"), "application/pdf") }
+    let(:clean_file_two) { Rack::Test::UploadedFile.new(ratonvirus_file_fixture("clean_file.pdf"), "application/pdf") }
+    let(:clean_file_three) { Rack::Test::UploadedFile.new(ratonvirus_file_fixture("clean_file.pdf"), "application/pdf") }
     let(:infected_file) { Rack::Test::UploadedFile.new(ratonvirus_file_fixture("infected_file.pdf"), "application/pdf") }
     let(:infected_file_blob) do
       ActiveStorage::Blob.create_and_upload!(
@@ -28,7 +28,7 @@ describe "ActiveStorageBlobAttachment" do
         expect(scanner).to receive(:run_scan).once.and_call_original
 
         article = Article.new
-        article.activestorage_file.attach(clean_file1)
+        article.activestorage_file.attach(clean_file_one)
 
         expect(article).to be_valid
       end
@@ -71,14 +71,14 @@ describe "ActiveStorageBlobAttachment" do
         expect(scanner).to receive(:run_scan).exactly(3).times.and_call_original
 
         article = Article.new
-        article.activestorage_files.attach([clean_file1, clean_file2, clean_file3])
+        article.activestorage_files.attach([clean_file_one, clean_file_two, clean_file_three])
 
         expect(article).to be_valid
       end
 
       it "does not re-scan when no files change" do
         article = Article.create!
-        article.activestorage_files.attach([infected_file, clean_file2])
+        article.activestorage_files.attach([infected_file, clean_file_two])
         # The first validation is skipped because we want to ensure that the
         # scanning is skipped for files attached earlier. This is expected
         # behavior as we do not want to re-scan the file on each form submission
@@ -97,7 +97,7 @@ describe "ActiveStorageBlobAttachment" do
 
       it "scans only new files when added to existing files" do
         article = Article.create!
-        article.activestorage_files.attach([infected_file, clean_file2])
+        article.activestorage_files.attach([infected_file, clean_file_two])
         # The first validation is skipped because we want to ensure that the
         # scanning is skipped for files attached earlier. This is expected
         # behavior as we do not want to re-scan the file on each form submission
@@ -109,7 +109,7 @@ describe "ActiveStorageBlobAttachment" do
 
         blob_a = article.activestorage_files[0].blob
         blob_b = article.activestorage_files[1].blob
-        article.activestorage_files = [blob_a, blob_b, clean_file3]
+        article.activestorage_files = [blob_a, blob_b, clean_file_three]
 
         expect(article).to be_valid
       end

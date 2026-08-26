@@ -3,6 +3,8 @@
 require "spec_helper_rails"
 
 describe AntivirusValidator do
+  subject { validatable.new }
+
   let(:validatable) do
     Class.new do
       # Without this, the validator would require a name option to be passed
@@ -20,7 +22,6 @@ describe AntivirusValidator do
       validates :file, antivirus: true
     end
   end
-  let(:subject) { validatable.new }
   let(:storage) { double }
 
   context "when storage does not accept the resource" do

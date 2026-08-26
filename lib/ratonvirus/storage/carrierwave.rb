@@ -11,13 +11,13 @@ module Ratonvirus
 
       def accept?(resource)
         if resource.is_a?(Array)
-          resource.all? { |subr| subr.is_a?(::CarrierWave::Uploader::Base) }
+          resource.all?(::CarrierWave::Uploader::Base)
         else
           resource.is_a?(::CarrierWave::Uploader::Base)
         end
       end
 
-      def asset_path(asset, &block)
+      def asset_path(asset, &)
         return unless block_given?
         return if asset.nil?
         return if asset.file.nil?
@@ -32,7 +32,7 @@ module Ratonvirus
         # scan on.
         io = StringIO.new(asset.file.read)
         ext = File.extname(asset.file.path)
-        io_path(io, ext, &block)
+        io_path(io, ext, &)
       end
 
       def asset_remove(asset)

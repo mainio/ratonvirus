@@ -6,7 +6,7 @@ describe Ratonvirus::Support::Backend do
   let(:namespace) { "Foo" }
   let(:backend_type) { :test }
 
-  # rubocop:disable RSpec/BeforeAfterAll
+  # rubocop:disable-next RSpec/BeforeAfterAll
   before(:all) do
     # Define the base level module
     described_mod = described_class
@@ -34,7 +34,6 @@ describe Ratonvirus::Support::Backend do
     #   RatonvirusTest::Foo::Base => Class
     Object.const_set("RatonvirusTest", mod)
   end
-  # rubocop:enable RSpec/BeforeAfterAll
 
   describe ".backend_class" do
     let(:method) { RatonvirusTest.method(:backend_class) }
@@ -144,7 +143,7 @@ describe Ratonvirus::Support::Backend do
   end
 
   describe ".define_backend" do
-    let(:subject) { Module.new }
+    subject { Module.new }
 
     before do
       subject.extend described_class

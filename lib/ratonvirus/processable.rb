@@ -7,10 +7,10 @@ module Ratonvirus
       @asset = asset
     end
 
-    def path(&block)
+    def path(&)
       return unless block_given?
 
-      @storage.asset_path(@asset, &block)
+      @storage.asset_path(@asset, &)
     end
 
     def remove
