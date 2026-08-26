@@ -1,3 +1,14 @@
+# v0.6.0
+
+Support for Rails 8
+
+Changed:
+
+- ActiveSupport dependency updated to `8.x` in order to support Rails 8
+- The minimum Ruby version is now set to 3.2 as it is a requirement of Rails 8
+- The development dependencies are removed from the `.gemspec` and moved to the local `Gemfile` within the development repository
+- Handling `ActiveStorage::Attached::Changes::CreateMany` now fetches the new uploads through `change.pending_uploads` instead of `change.subchanges` in order to get access to the newly uploaded file objects [#41](https://github.com/mainio/ratonvirus/pull/41)
+
 # v0.5.0
 
 Changed:
