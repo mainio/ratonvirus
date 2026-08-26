@@ -86,9 +86,9 @@ module Ratonvirus
         yield_processable_from(change, &)
       end
 
-      def handle_create_many(change, &block)
+      def handle_create_many(change, &)
         change.pending_uploads.each do |subchange|
-          yield_processable_from(subchange, &block)
+          yield_processable_from(subchange, &)
         end
       end
 
