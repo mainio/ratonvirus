@@ -27,8 +27,6 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-      - name: Install dependencies
-        run: bundle install --jobs 4 --retry 3
       - name: RSpec
         run: bundle exec rspec
       - uses: codecov/codecov-action@v7
