@@ -39,6 +39,21 @@ describe Ratonvirus do
     )
   end
 
+  it "defines the CHANGELOG entry for the current version" do
+    version = described_class::VERSION
+    changelog_path = File.expand_path("../CHANGELOG.md", spec_path)
+
+    changelog_entry_found = false
+    File.open(changelog_path, "r") do |file|
+      file.each do |line|
+        changelog_entry_found = line.strip == "# v#{version}"
+        break if changelog_entry_found
+      end
+    end
+
+    expect(changelog_entry_found).to be(true), "Please add a CHANGELOG entry for the new version v#{version}."
+  end
+
   context "with addons" do
     it "accepts new addons to be configured" do
       described_class.configure do |config|
