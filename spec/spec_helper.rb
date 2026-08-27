@@ -4,6 +4,11 @@ require "ratonvirus"
 
 require_relative "helpers"
 
+if ENV["SIMPLECOV"]
+  require "simplecov"
+  SimpleCov.start
+end
+
 RSpec.configure do |config|
   config.include Ratonvirus::Test::Helpers
 

@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
 if ENV["SIMPLECOV"]
-  SimpleCov.start do
-    add_filter "lib/ratonvirus/version.rb"
-    add_filter "lib/ratonvirus/engine.rb"
-    add_filter "spec/"
-  end
+  SimpleCov.skip "lib/ratonvirus/version.rb"
+  SimpleCov.skip "lib/ratonvirus/engine.rb"
+  SimpleCov.skip "spec/"
 
   SimpleCov.command_name ENV["COMMAND_NAME"] || File.basename(Dir.pwd)
 
