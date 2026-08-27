@@ -32,11 +32,11 @@ module Ratonvirus
       # Processing of the resource is handled by the first storage in the list
       # that returns `true` for `accept?(resource)`. Any consequent storages are
       # skipped.
-      def process(resource, &block)
+      def process(resource, &)
         return unless block_given?
 
         storage_for(resource) do |storage|
-          storage.process(resource, &block)
+          storage.process(resource, &)
         end
       end
 

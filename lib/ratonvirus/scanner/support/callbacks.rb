@@ -58,9 +58,9 @@ module Ratonvirus
           result
         end
 
-        def run_callback_callables(callables, *args)
+        def run_callback_callables(callables, *)
           callables.each do |callable|
-            send(callable, *args)
+            send(callable, *)
           end
         end
 
